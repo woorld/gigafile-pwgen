@@ -21,11 +21,14 @@ const observer = new MutationObserver((mutationsList) => {
         uploadFileArea.getElementsByClassName('dlkey_inp')[0].value = pass;
         uploadFileArea.getElementsByClassName('set_dlkey gfbtn')[0].click();
 
+        const dlUrl = uploadFileArea.getElementsByClassName('file_info_url url')[0].value;
+        const copyText = `${dlUrl}\nダウンロードパスワード：${pass}`;
+
         try {
-          await navigator.clipboard.writeText(pass);
+          await navigator.clipboard.writeText(copyText);
         }
         catch (e) {
-          alert('ダウンロードパスワードのクリップボードへのコピーに失敗しました: ' + e);
+          alert('クリップボードへのコピーに失敗しました: ' + e);
         }
       });
 
