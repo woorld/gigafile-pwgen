@@ -1,5 +1,5 @@
 {
-  "name": "IIDX 地力表拡張",
+  "name": "ギガファイル便パスジェネレータ",
   "version": "1.0.0",
   "description": "ギガファイル便（https://gigafile.nu/）のページにDLパスワード生成ボタンを追加する拡張機能です。",
   "manifest_version": 3,
