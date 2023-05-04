@@ -14,7 +14,7 @@ const observer = new MutationObserver((mutationsList) => {
     mutation.addedNodes.forEach((uploadFileArea) => {
       const button = document.createElement('button');
 
-      button.textContent = 'パスワード設定';
+      button.textContent = 'PW生成・設定';
       button.addEventListener('click', async () => {
         const pass = generatePass();
         // パスを入力して設定ボタンを押下

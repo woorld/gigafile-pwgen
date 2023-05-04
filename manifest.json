@@ -1,7 +1,7 @@
 {
-  "name": "ギガファイル便パスジェネレータ",
+  "name": "ギガファイル便DLパスジェネレータ",
   "version": "1.0.0",
-  "description": "ギガファイル便（https://gigafile.nu/）のページにDLパスワード生成ボタンを追加する拡張機能です。",
+  "description": "ギガファイル便（https://gigafile.nu/）のページにDLパスワードの生成・設定を行うボタンを追加する拡張機能です。",
   "manifest_version": 3,
   "permissions": [
     "activeTab",
