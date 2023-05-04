@@ -12,14 +12,27 @@ chrome.storage.sync.get(['isEnable'], (result) => {
     subtree: false,
   };
   const observer = new MutationObserver((mutationsList) => {
-    // TODO: ボタンのスタイルを既存のものに合わせる処理の実装
+    // 設定ボタンのスタイルの取得
+    const ignorePropName = /\d{1,}|width/;
     const buttonStyle = getComputedStyle(document.getElementsByClassName('set_dlkey')[0]);
+    let newButtonStyle = '';
+
+    // 取得した設定ボタンのスタイルから必要なスタイルのみを抽出
+    for (const prop in buttonStyle) {
+      const propVal = buttonStyle.getPropertyValue(prop);
+      if (ignorePropName.test(prop) || propVal === '') {
+        continue;
+      }
+      newButtonStyle += `${prop}: ${propVal};`;
+    }
 
     for (mutation of mutationsList) {
       mutation.addedNodes.forEach((uploadFileArea) => {
         const button = document.createElement('button');
 
         button.textContent = 'PW生成・設定';
+        button.style.cssText = newButtonStyle;
+
         button.addEventListener('click', async () => {
           const pass = generatePass();
           // パスを入力して設定ボタンを押下
