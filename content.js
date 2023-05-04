@@ -4,7 +4,7 @@ chrome.storage.sync.get(['isEnable'], (result) => {
   }
 
   const randChar = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  const passLength = 4;
+  const pwLength = 4;
   const target = document.getElementById('file_list');
   const obsConfig = {
     childList: true,
@@ -34,13 +34,13 @@ chrome.storage.sync.get(['isEnable'], (result) => {
         button.style.cssText = newButtonStyle;
 
         button.addEventListener('click', async () => {
-          const pass = generatePass();
+          const pw = generatePw();
           // パスを入力して設定ボタンを押下
-          uploadFileArea.getElementsByClassName('dlkey_inp')[0].value = pass;
+          uploadFileArea.getElementsByClassName('dlkey_inp')[0].value = pw;
           uploadFileArea.getElementsByClassName('set_dlkey gfbtn')[0].click();
 
           const dlUrl = uploadFileArea.getElementsByClassName('file_info_url url')[0].value;
-          const copyText = `${dlUrl}\nダウンロードパスワード：${pass}`;
+          const copyText = `${dlUrl}\nダウンロードパスワード：${pw}`;
 
           try {
             await navigator.clipboard.writeText(copyText);
@@ -58,7 +58,7 @@ chrome.storage.sync.get(['isEnable'], (result) => {
   // #file_listを監視
   observer.observe(target, obsConfig);
 
-  const generatePass = () => {
-    return Array.from(crypto.getRandomValues(new Uint32Array(passLength))).map((n) => randChar[n % randChar.length]).join('');
+  const generatePw = () => {
+    return Array.from(crypto.getRandomValues(new Uint32Array(pwLength))).map((n) => randChar[n % randChar.length]).join('');
   };
 });
