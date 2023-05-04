@@ -7,16 +7,27 @@
   padding: 0;
 }
 
-html {
+body {
   width: 300px;
-  height: 200px;
-  padding: 8px;
+  padding: 16px;
+}
+
+.title {
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 16px;
 }
 
 .input-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-top: 16px;
+  border-top: solid 1px #aaa;
+}
+
+.input-row label {
+  font-size: 14px;
 }
 
 .checkbox input {
@@ -33,7 +44,7 @@ html {
   display: flex;
   align-items: center;
   transition: 200ms ease;
-  background-color: #bbb;
+  background-color: #aaa;
 }
 
 .checkbox .checkbox__switch::before {
@@ -53,4 +64,11 @@ html {
 .checkbox input:checked + .checkbox__switch::before {
   content: "";
   transform: translateX(100%);
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    background-color: #222;
+    color: #fff;
+  }
 }
