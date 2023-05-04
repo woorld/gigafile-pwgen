@@ -4,8 +4,6 @@
   "description": "ギガファイル便（https://gigafile.nu/）のページにDLパスワードの生成・設定を行うボタンを追加する拡張機能です。",
   "manifest_version": 3,
   "permissions": [
-    "activeTab",
-    "scripting",
     "storage"
   ],
   "action": {
