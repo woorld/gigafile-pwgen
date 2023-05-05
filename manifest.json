@@ -15,11 +15,11 @@
         "https://gigafile.nu/"
       ],
       "js": [
-        "content.js"
+        "js/content.js"
       ]
     }
   ],
   "background": {
-    "service_worker": "service_worker.js"
+    "service_worker": "js/service_worker.js"
   }
 }
