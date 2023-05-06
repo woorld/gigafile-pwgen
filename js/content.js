@@ -4,9 +4,11 @@ const generatePw = () => {
   return Array.from(crypto.getRandomValues(new Uint32Array(pwLength))).map((n) => randChar[n % randChar.length]).join('');
 };
 
-const copyComputedCssText = (target) => {
+const copyComputedCssText = (target, ignoreProps) => {
   // スタイルの取得
-  const ignorePropName = /^(width|inline-size)$/;
+  const ignorePropName = ignoreProps !== undefined
+    ? new RegExp(`^(${ignoreProps.join('|')})$`)
+    : '';
   const targetStyle = getComputedStyle(target);
   let computedCssText = '';
 
@@ -15,7 +17,7 @@ const copyComputedCssText = (target) => {
     const propName = targetStyle.item(i);
     const propVal = targetStyle.getPropertyValue(propName);
 
-    if (ignorePropName.test(propName) || propVal === '') {
+    if ((ignorePropName !== '' && ignorePropName.test(propName)) || propVal === '') {
       continue;
     }
 
@@ -42,7 +44,7 @@ chrome.storage.sync.get(['isEnable'], (result) => {
         const button = document.createElement('button');
 
         button.textContent = 'PW生成・設定';
-        button.style.cssText = copyComputedCssText(document.getElementsByClassName('set_dlkey')[0]);
+        button.style.cssText = copyComputedCssText(document.getElementsByClassName('set_dlkey')[0], ['width', 'inline-size']);
 
         button.addEventListener('click', async () => {
           const pw = generatePw();
