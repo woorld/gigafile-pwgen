@@ -6,19 +6,22 @@ const generatePw = () => {
 
 const copyComputedCssText = (target) => {
   // スタイルの取得
-  const ignorePropName = /\d{1,}|width/;
+  const ignorePropName = /^(width|inline-size)$/;
   const targetStyle = getComputedStyle(target);
   let computedCssText = '';
 
-  // 取得したスタイルから必要なスタイルのみを抽出
-  for (const prop in targetStyle) {
-    const propVal = targetStyle.getPropertyValue(prop);
-    if (ignorePropName.test(prop) || propVal === '') {
-      console.log(prop, targetStyle.getPropertyValue(prop), false);
+  // 取得したスタイルから必要なスタイルのみを抽出しCSSTextを組み立て
+  for (let i = 0; i < targetStyle.length; i++) {
+    const propName = targetStyle.item(i);
+    const propVal = targetStyle.getPropertyValue(propName);
+
+    if (ignorePropName.test(propName) || propVal === '') {
+      console.log(propName, propVal, false);
       continue;
     }
-    console.log(prop, targetStyle.getPropertyValue(prop), true);
-    computedCssText += `${prop}: ${propVal};`;
+
+    console.log(propName, propVal, true);
+    computedCssText += `${propName}: ${propVal};`;
   }
 
   return computedCssText;
