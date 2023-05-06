@@ -12,26 +12,12 @@ chrome.storage.sync.get(['isEnable'], (result) => {
     subtree: false,
   };
   const observer = new MutationObserver((mutationsList) => {
-    // 設定ボタンのスタイルの取得
-    const ignorePropName = /\d{1,}|width/;
-    const buttonStyle = getComputedStyle(document.getElementsByClassName('set_dlkey')[0]);
-    let newButtonStyle = '';
-
-    // 取得した設定ボタンのスタイルから必要なスタイルのみを抽出
-    for (const prop in buttonStyle) {
-      const propVal = buttonStyle.getPropertyValue(prop);
-      if (ignorePropName.test(prop) || propVal === '') {
-        continue;
-      }
-      newButtonStyle += `${prop}: ${propVal};`;
-    }
-
     for (mutation of mutationsList) {
       mutation.addedNodes.forEach((uploadFileArea) => {
         const button = document.createElement('button');
 
         button.textContent = 'PW生成・設定';
-        button.style.cssText = newButtonStyle;
+        button.style.cssText = copyComputedCssText(document.getElementsByClassName('set_dlkey')[0]);;
 
         button.addEventListener('click', async () => {
           const pw = generatePw();
@@ -61,4 +47,22 @@ chrome.storage.sync.get(['isEnable'], (result) => {
   const generatePw = () => {
     return Array.from(crypto.getRandomValues(new Uint32Array(pwLength))).map((n) => randChar[n % randChar.length]).join('');
   };
+
+  const copyComputedCssText = (target) => {
+    // スタイルの取得
+    const ignorePropName = /\d{1,}|width/;
+    const targetStyle = getComputedStyle(target);
+    let computedCssText = '';
+
+    // 取得したスタイルから必要なスタイルのみを抽出
+    for (const prop in targetStyle) {
+      const propVal = targetStyle.getPropertyValue(prop);
+      if (ignorePropName.test(prop) || propVal === '') {
+        continue;
+      }
+      computedCssText += `${prop}: ${propVal};`;
+    }
+
+    return computedCssText;
+  }
 });
