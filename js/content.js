@@ -16,11 +16,9 @@ const copyComputedCssText = (target) => {
     const propVal = targetStyle.getPropertyValue(propName);
 
     if (ignorePropName.test(propName) || propVal === '') {
-      console.log(propName, propVal, false);
       continue;
     }
 
-    console.log(propName, propVal, true);
     computedCssText += `${propName}: ${propVal};`;
   }
 
