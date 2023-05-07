@@ -32,6 +32,48 @@ chrome.storage.sync.get(['isEnable'], (result) => {
     return;
   }
 
+  // 「まとめる」ボタンの横に「パスワード付きでまとめる」ボタンを追加
+  const buttonPackUp = document.getElementById('matomete_btn');
+  const buttonPackUpWithPw = document.createElement('button');
+
+  // 「まとめる」ボタンに合わせてspanでボタン内テキストを作成し追加
+  const buttonText = document.createElement('span');
+  buttonText.textContent = 'パスワード付きでまとめる';
+
+  const buttonCssText = copyComputedCssText(buttonPackUp, ['width', 'inline-size', 'padding']) + 'padding: 5px;';
+  buttonPackUpWithPw.style.cssText = buttonCssText;
+  buttonPackUpWithPw.appendChild(buttonText);
+
+  buttonPackUpWithPw.addEventListener('click', async () => {
+    // TODO: ファイルが選択されていない、または1つでもアップロード未完了の場合は中断する処理
+    const pw = generatePw();
+    const obsConfig = {
+      attributes: true,
+    };
+    const obsPackUp = new MutationObserver(async (mutationsList) => {
+      // TODO: 値がギガファイル便URLであることのチェック
+      const dlUrl = mutationsList[0].target.attributes[4].value;
+      const copyText = `${dlUrl}\nダウンロードパスワード：${pw}`;
+
+      try {
+        await navigator.clipboard.writeText(copyText);
+      }
+      catch (e) {
+        alert('クリップボードへのコピーに失敗しました: ' + e);
+      }
+
+      obsPackUp.disconnect();
+    });
+
+    obsPackUp.observe(document.getElementById('matomete_url'), obsConfig);
+
+    // パスを入力して設定ボタンを押下
+    document.getElementById('zip_dlkey').value = pw;
+    buttonPackUp.click();
+  });
+
+  buttonPackUp.parentNode.appendChild(buttonPackUpWithPw);
+
   const target = document.getElementById('file_list');
   const obsConfig = {
     childList: true,
