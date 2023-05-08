@@ -45,7 +45,24 @@ chrome.storage.sync.get(['isEnable'], (result) => {
   buttonPackUpWithPw.appendChild(buttonText);
 
   buttonPackUpWithPw.addEventListener('click', async () => {
-    // TODO: ファイルが選択されていない、または1つでもアップロード未完了の場合は中断する処理
+    const files = document.getElementsByClassName('file_info');
+
+    if (files.length <= 0) {
+      alert('ファイルを選択してください。');
+      return;
+    }
+
+    for (file of files) {
+      const uploadStatus = file.getElementsByClassName('status')[0].textContent;
+      const buttonCancelStatus = file.getElementsByClassName('cancel')[0].getAttribute('value');
+
+      if (uploadStatus === '完了！' || buttonCancelStatus === 'on') {
+        continue;
+      }
+      alert('アップロードが完了していないファイルがあります。\n完了してから再度お試しください。');
+      return;
+    }
+
     const pw = generatePw();
     const obsConfig = {
       attributes: true,
