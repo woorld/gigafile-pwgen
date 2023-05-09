@@ -27,6 +27,15 @@ const copyComputedCssText = (target, ignoreProps) => {
   return computedCssText;
 }
 
+const copyToClipboard = async (copyText) => {
+  try {
+    await navigator.clipboard.writeText(copyText);
+  }
+  catch (e) {
+    alert('クリップボードへのコピーに失敗しました: ' + e);
+  }
+};
+
 chrome.storage.sync.get(['isEnable'], (result) => {
   if (!result.isEnable) {
     return;
@@ -68,17 +77,10 @@ chrome.storage.sync.get(['isEnable'], (result) => {
       attributes: true,
     };
     const obsPackUp = new MutationObserver(async (mutationsList) => {
-      // TODO: 値がギガファイル便URLであることのチェック
       const dlUrl = mutationsList[0].target.attributes[4].value;
       const copyText = `${dlUrl}\nダウンロードパスワード：${pw}`;
 
-      try {
-        await navigator.clipboard.writeText(copyText);
-      }
-      catch (e) {
-        alert('クリップボードへのコピーに失敗しました: ' + e);
-      }
-
+      await copyToClipboard(copyText);
       obsPackUp.disconnect();
     });
 
@@ -114,12 +116,7 @@ chrome.storage.sync.get(['isEnable'], (result) => {
           const dlUrl = uploadFileArea.getElementsByClassName('file_info_url url')[0].value;
           const copyText = `${dlUrl}\nダウンロードパスワード：${pw}`;
 
-          try {
-            await navigator.clipboard.writeText(copyText);
-          }
-          catch (e) {
-            alert('クリップボードへのコピーに失敗しました: ' + e);
-          }
+          await copyToClipboard(copyText);
         });
 
         uploadFileArea.getElementsByClassName('dlkey')[0].appendChild(button);
