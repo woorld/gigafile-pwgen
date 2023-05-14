@@ -1,0 +1,15 @@
+{
+  "name": "gigafile-pwgen",
+  "version": "1.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "woorld",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chrome": "^0.0.235",
+    "typescript": "^5.0.4"
+  }
+}
