@@ -1,4 +1,4 @@
-import { randChar, pwLength } from './constants';
+import { randChar, pwLength, uploadCompleteStr } from './constants';
 
 const generatePw = (): string => {
   return Array.from(crypto.getRandomValues(new Uint32Array(pwLength))).map((n) => randChar[n % randChar.length]).join('');
@@ -65,7 +65,7 @@ chrome.storage.sync.get(['isEnable'], (result) => {
       const uploadStatus = file.getElementsByClassName('status')[0].textContent;
       const buttonCancelStatus = file.getElementsByClassName('cancel')[0].getAttribute('value');
 
-      if (uploadStatus === '完了！' || buttonCancelStatus === 'on') {
+      if (uploadStatus === uploadCompleteStr || buttonCancelStatus === 'on') {
         continue;
       }
       alert('アップロードが完了していないファイルがあります。\n完了してから再度お試しください。');
@@ -112,6 +112,12 @@ chrome.storage.sync.get(['isEnable'], (result) => {
         button.style.cssText = copyComputedCssText(document.getElementsByClassName('set_dlkey')[0] as HTMLButtonElement, ['width', 'inline-size']);
 
         button.addEventListener('click', async () => {
+          const uploadStatus = uploadFileArea.getElementsByClassName('status')[0].textContent;
+          if (uploadStatus !== uploadCompleteStr) {
+            alert('ファイルのアップロードが完了していません。\n完了してから再度お試しください。');
+            return;
+          }
+
           const pw = generatePw();
           // パスを入力して設定ボタンを押下
           (uploadFileArea.getElementsByClassName('dlkey_inp')[0] as HTMLInputElement).value = pw;
