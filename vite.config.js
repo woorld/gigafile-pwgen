@@ -6,6 +6,7 @@ export default defineConfig((opt) => {
     root: 'src',
     build: {
       outDir: '../dist',
+      emptyOutDir: true,
       rollupOptions: {
         input: {
           content: resolve(__dirname, 'src/content.ts'),
