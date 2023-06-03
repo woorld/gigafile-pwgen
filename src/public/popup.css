@@ -43,7 +43,6 @@ body {
   cursor: pointer;
   display: flex;
   align-items: center;
-  transition: 200ms ease;
   background-color: #aaa;
 }
 
@@ -52,8 +51,11 @@ body {
   width: 24px;
   height: 24px;
   border-radius: 25px;
-  /* border: solid 1px #666; */
   background-color: #fff;
+}
+
+.checkbox.checkbox-initialized .checkbox__switch,
+.checkbox.checkbox-initialized .checkbox__switch::before {
   transition: 200ms ease;
 }
 
