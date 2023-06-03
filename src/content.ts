@@ -1,6 +1,5 @@
-// TODO: 定数を切り分け
-const randChar = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-const pwLength = 4;
+import { randChar, pwLength } from './constants';
+
 const generatePw = (): string => {
   return Array.from(crypto.getRandomValues(new Uint32Array(pwLength))).map((n) => randChar[n % randChar.length]).join('');
 };
