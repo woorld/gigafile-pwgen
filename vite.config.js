@@ -9,7 +9,7 @@ export default defineConfig((opt) => {
       rollupOptions: {
         input: {
           content: resolve(__dirname, 'src/content.ts'),
-          popup: resolve(__dirname, 'src/static/popup.html'),
+          popup: resolve(__dirname, 'src/popup.ts'),
           service_worker: resolve(__dirname, 'src/service_worker.ts'),
         },
         output: {

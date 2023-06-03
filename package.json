@@ -5,9 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run remove && tsc && npm run copy",
-    "copy": "node -e \"require('fs-extra').copySync('./src/static', './dist')\"",
-    "remove": "node -e \"require('fs-extra').removeSync('./dist/')\""
+    "build": "tsc && vite build"
   },
   "author": "woorld",
   "license": "MIT",
