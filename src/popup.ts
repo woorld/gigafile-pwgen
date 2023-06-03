@@ -1,7 +1,5 @@
-let checkboxEnable: HTMLInputElement;
-
 window.addEventListener('load', () => {
-  const checkboxEnable: HTMLInputElement = document.getElementById('enable') as HTMLInputElement;
+  const checkboxEnable = document.getElementById('enable') as HTMLInputElement;
   chrome.storage.sync.get(['isEnable'], (result) => {
     checkboxEnable.checked = result.isEnable;
   });
