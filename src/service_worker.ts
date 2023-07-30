@@ -1,8 +1,13 @@
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.sync.get(['isEnable'], (result) => {
-    if (result.isEnable != null) {
+const initSettingVal = (settingKey: string): void => {
+  chrome.storage.sync.get([settingKey], (result) => {
+    if (result[settingKey] != null) {
       return;
     }
-    chrome.storage.sync.set({ isEnable: true });
+    chrome.storage.sync.set({ [settingKey]: true });
   });
+}
+
+chrome.runtime.onInstalled.addListener(() => {
+  initSettingVal('isEnable');
+  initSettingVal('isCopyToClipboard');
 });
