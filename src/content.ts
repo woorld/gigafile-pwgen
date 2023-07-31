@@ -28,6 +28,11 @@ const copyComputedCssText = (target: HTMLElement, ignoreProps: Array<string>): s
 }
 
 const copyToClipboard = async (copyText: string): Promise<void> => {
+  const isCopyToClipboard = (await chrome.storage.sync.get('isCopyToClipboard'))['isCopyToClipboard'];
+  if (!isCopyToClipboard) {
+    return;
+  }
+
   try {
     await navigator.clipboard.writeText(copyText);
   }
