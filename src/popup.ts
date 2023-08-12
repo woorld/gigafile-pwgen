@@ -1,9 +1,45 @@
+import { settingParams } from './constants';
+
+const toKebabCase = (str: string) => str.replace(/[A-Z0-9]/g, repstr => '-' + repstr.toLowerCase());
+const toCamelCase = (str: string) => str.replace(/-[a-z0-9]/g, str => str.slice(1).toUpperCase());
+
 window.addEventListener('load', async () => {
+  const settingList = document.getElementById('setting-list');
+
+  // @ts-ignore
+  for (const [key, param] of settingParams) {
+    const kebabStorageKey = toKebabCase(param.storageKey);
+
+    const settingInput = document.createElement('li');
+    settingInput.className = 'input-row';
+
+    const label = document.createElement('label');
+    label.setAttribute('for', kebabStorageKey);
+
+    const checkbox = document.createElement('div');
+    checkbox.className = 'checkbox';
+
+    const checkboxInput = document.createElement('input');
+    checkboxInput.setAttribute('type', 'checkbox');
+    checkboxInput.id = kebabStorageKey;
+
+    const checkboxLabel = document.createElement('label');
+    checkboxLabel.className = 'checkbox__switch';
+    checkboxLabel.setAttribute('for', kebabStorageKey);
+
+    checkbox.appendChild(checkboxInput);
+    checkbox.appendChild(checkboxLabel);
+
+    settingInput.appendChild(label);
+    settingInput.appendChild(checkbox);
+
+    settingList!.appendChild(settingInput);
+  }
   const checkboxes = document.querySelectorAll('.input-row input[type="checkbox"]');
 
   await chrome.storage.sync.get(null, (result) => {
     for (const checkbox of checkboxes) {
-      const storageValName = checkbox.id.replace(/-[a-z0-9]/g, str => str.slice(1).toUpperCase());
+      const storageValName = toCamelCase(checkbox.id);
 
       // 各チェックボックスのオンオフを設定値と同期させる
       (checkbox as HTMLInputElement).checked = result[storageValName];
