@@ -41,6 +41,25 @@ const copyToClipboard = async (copyText: string): Promise<void> => {
   }
 };
 
+const createTooltip = (content: string, targetElement: Element): void => {
+  const tooltip = document.createElement('div');
+  tooltip.className = 'pwgen-tooltip';
+  tooltip.innerHTML = `<p>${content}</p>`;
+
+  tooltip.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+
+  targetElement.appendChild(tooltip);
+
+  const targetRect = targetElement.getBoundingClientRect();
+  const tooltipRect = tooltip.getBoundingClientRect();
+
+  // HACK: シェブロン部分を要素に重ねるため+4pxする
+  tooltip.style.top = targetRect.height + 4 + 'px';
+  tooltip.style.left = (targetRect.width / 2 - tooltipRect.width / 2) + 'px';
+};
+
 chrome.storage.sync.get(['isEnable'], (result) => {
   if (!result.isEnable) {
     return;
@@ -97,6 +116,7 @@ chrome.storage.sync.get(['isEnable'], (result) => {
   });
 
   buttonPackUp.parentNode!.appendChild(buttonPackUpWithPw);
+  createTooltip('testtesttest', buttonPackUpWithPw);
 
   const target = document.getElementById('file_list')!;
   const obsConfig = {
