@@ -41,7 +41,7 @@ const copyToClipboard = async (copyText: string): Promise<void> => {
   }
 };
 
-const createTooltip = (content: string, targetElement: Element): void => {
+const createTooltip = (content: string, targetElement: HTMLElement): void => {
   const tooltip = document.createElement('div');
   tooltip.className = 'pwgen-tooltip';
   tooltip.innerHTML = `<p>${content}</p>`;
@@ -55,9 +55,9 @@ const createTooltip = (content: string, targetElement: Element): void => {
   const targetRect = targetElement.getBoundingClientRect();
   const tooltipRect = tooltip.getBoundingClientRect();
 
-  // HACK: シェブロン部分を要素に重ねるため+4pxする
-  tooltip.style.top = targetRect.height + 4 + 'px';
-  tooltip.style.left = (targetRect.width / 2 - tooltipRect.width / 2) + 'px';
+  // HACK: シェブロン部分を要素に重ねるため+8pxする
+  tooltip.style.top = targetRect.height + 8 + 'px';
+  tooltip.style.left = targetElement.offsetLeft + targetElement.offsetWidth / 2 - tooltipRect.width / 2 + 'px';
 };
 
 chrome.storage.sync.get(['isEnable'], (result) => {

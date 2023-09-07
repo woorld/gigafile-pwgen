@@ -6,20 +6,20 @@
   position: absolute;
   padding: 8px;
   border-radius: 4px;
-  box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.3);
   text-align: center;
   width: auto;
 }
 
 .pwgen-tooltip::before {
   content: "";
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   background-color: #fff;
   transform: rotate(45deg);
   position: absolute;
-  bottom: -10px;
-  left: calc(50% - 10px);
+  bottom: -8px;
+  left: calc(50% - 8px);
 }
 
 .pwgen-tooltip p {
