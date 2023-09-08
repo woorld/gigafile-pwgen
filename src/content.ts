@@ -41,23 +41,50 @@ const copyToClipboard = async (copyText: string): Promise<void> => {
   }
 };
 
-const createTooltip = (content: string, targetElement: HTMLElement): void => {
-  const tooltip = document.createElement('div');
-  tooltip.className = 'pwgen-tooltip';
-  tooltip.innerHTML = `<p>${content}</p>`;
+// TODO: コピー通知用に改修
+// const createTooltip = (content: string, targetElement: HTMLElement): void => {
+//   const tooltip = document.createElement('div');
+//   tooltip.className = 'pwgen-tooltip';
+//   tooltip.innerHTML = `<p>${content}</p>`;
 
-  tooltip.addEventListener('click', (e) => {
-    e.stopPropagation();
+//   tooltip.addEventListener('click', (e) => {
+//     e.stopPropagation();
+//   });
+
+//   targetElement.appendChild(tooltip);
+
+//   const targetRect = targetElement.getBoundingClientRect();
+//   const tooltipRect = tooltip.getBoundingClientRect();
+
+//   // HACK: シェブロン部分を要素に重ねるため+8pxする
+//   tooltip.style.top = targetRect.height + 8 + 'px';
+//   tooltip.style.left = targetElement.offsetLeft + targetElement.offsetWidth / 2 - tooltipRect.width / 2 + 'px';
+// };
+
+const showUpdateToast = () => {
+  document.body.insertAdjacentHTML('beforeend', `
+  <div class="pwgen-toast">
+    <img class="pwgen-toast__icon">
+    <div class="pwgen-toast__content">
+      <p>ギガファイル便DLパスジェネレーターがアップデートされました！</p>
+      <p>詳しくは<a href="https://example.com/" target="_blank" rel="noopener">こちら</a>をご覧ください。</p>
+    </div>
+    <div class="pwgen-toast__close-btn-area"></div>
+  </div>
+  `);
+
+  // CSSでは画像のパスを設定できないためこちらで設定する
+  const toastIcon = document.getElementsByClassName('pwgen-toast__icon')[0];
+  toastIcon!.setAttribute('src', chrome.runtime.getURL('img/icon/icon128.png'));
+
+  const toastCloseBtn = document.getElementsByClassName('pwgen-toast__close-btn-area')[0];
+  toastCloseBtn.addEventListener('click', () => {
+    // HACK: アニメーション完了を待って要素を削除する
+    const toast = toastCloseBtn.parentElement;
+
+    toast!.style.opacity = '0';
+    setTimeout(() => { toast!.remove(); }, 1000);
   });
-
-  targetElement.appendChild(tooltip);
-
-  const targetRect = targetElement.getBoundingClientRect();
-  const tooltipRect = tooltip.getBoundingClientRect();
-
-  // HACK: シェブロン部分を要素に重ねるため+8pxする
-  tooltip.style.top = targetRect.height + 8 + 'px';
-  tooltip.style.left = targetElement.offsetLeft + targetElement.offsetWidth / 2 - tooltipRect.width / 2 + 'px';
 };
 
 chrome.storage.sync.get(['isEnable'], (result) => {
@@ -116,7 +143,7 @@ chrome.storage.sync.get(['isEnable'], (result) => {
   });
 
   buttonPackUp.parentNode!.appendChild(buttonPackUpWithPw);
-  createTooltip('testtesttest', buttonPackUpWithPw);
+  showUpdateToast();
 
   const target = document.getElementById('file_list')!;
   const obsConfig = {

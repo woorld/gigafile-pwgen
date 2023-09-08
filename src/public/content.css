@@ -28,3 +28,66 @@
   /* TODO: スタイル継承問題解決後に削除 */
   -webkit-text-fill-color: #000;
 }
+
+.pwgen-toast {
+  border-left: solid 8px #47b881;
+  border-radius: 4px;
+  box-shadow: 4px 4px rgba(0, 0, 0, 0.2);
+  background-color: #f0f5ff;
+  position: fixed;
+  top: 40px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10000;
+  transition: 200ms ease;
+}
+
+.pwgen-toast__icon {
+  margin-left:8px;
+  width: 32px;
+  height: 32px;
+  user-select: none;
+  pointer-events: none;
+}
+
+.pwgen-toast__content {
+  margin: 8px 0 8px 8px;
+  font-size: 14px;
+}
+
+.pwgen-toast__content p {
+  margin: 0;
+}
+
+.pwgen-toast__close-btn-area {
+  width: 32px;
+  height: 100%;
+  position: relative;
+  transition: 200ms ease;
+}
+
+.pwgen-toast__close-btn-area:hover {
+  opacity: 0.8;
+}
+
+.pwgen-toast__close-btn-area::before,
+.pwgen-toast__close-btn-area::after {
+  content: "";
+  width: 12px;
+  height: 2px;
+  background-color: #666;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.pwgen-toast__close-btn-area::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.pwgen-toast__close-btn-area::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
