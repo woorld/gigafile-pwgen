@@ -67,7 +67,7 @@ const showUpdateToast = () => {
     <img class="pwgen-toast__icon">
     <div class="pwgen-toast__content">
       <p>ギガファイル便DLパスジェネレーターがアップデートされました！</p>
-      <p>詳しくは<a href="https://example.com/" target="_blank" rel="noopener">こちら</a>をご覧ください。</p>
+      <p>詳しくは<a href="https://github.com/woorld/gigafile-pwgen/releases/" target="_blank" rel="noopener">こちら</a>をご覧ください。</p>
     </div>
     <div class="pwgen-toast__close-btn-area"></div>
   </div>
@@ -91,6 +91,16 @@ chrome.storage.sync.get(['isEnable'], (result) => {
   if (!result.isEnable) {
     return;
   }
+
+  chrome.storage.sync.get(['isUpdate'], (result) => {
+    if (!result.isUpdate) {
+      return;
+    }
+
+    // アップデート直後の場合はトーストで通知する
+    showUpdateToast();
+    chrome.storage.sync.set({ isUpdate: false });
+  });
 
   // 「まとめる」ボタンの横に「パスワード付きでまとめる」ボタンを追加
   const buttonPackUp: HTMLElement = document.getElementById('matomete_btn')!;
@@ -143,7 +153,6 @@ chrome.storage.sync.get(['isEnable'], (result) => {
   });
 
   buttonPackUp.parentNode!.appendChild(buttonPackUpWithPw);
-  showUpdateToast();
 
   const target = document.getElementById('file_list')!;
   const obsConfig = {
