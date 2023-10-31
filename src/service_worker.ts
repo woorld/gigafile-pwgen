@@ -7,7 +7,12 @@ const initSettingVal = (settingKey: string): void => {
   });
 }
 
-chrome.runtime.onInstalled.addListener(() => {
-  initSettingVal('isEnable');
-  initSettingVal('isCopyToClipboard');
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason === 'install') {
+    initSettingVal('isEnable');
+    initSettingVal('isCopyToClipboard');
+  }
+  else if (details.reason === 'update') {
+    chrome.storage.sync.set({ isUpdate: true });
+  }
 });
