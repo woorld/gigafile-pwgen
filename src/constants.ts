@@ -2,29 +2,18 @@ export const randChar = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012
 export const pwLength = 4;
 export const uploadCompleteStr = '完了！';
 
-export type settingParam = {
+export type SettingParam = {
   storageKey: string,
   label: string,
 };
 
-// export const settingParams: Readonly<{ isEnable: settingParam, isCopyToClipboard: settingParam}> = Object.freeze({
-//   isEnable: {
-//     storageKey: 'isEnable',
-//     label: '有効',
-//   },
-//   isCopyToClipboard: {
-//     storageKey: 'isCopyToClipboard',
-//     label: 'DLパス・URLのコピー',
-//   },
-// });
-
-export const settingParams = new Map<string, settingParam>([
-  ['isEnable', {
+export const settingParams: SettingParam[] = [
+  {
     storageKey: 'isEnable',
     label: '有効',
-  }],
-  ['isCopyToClipboard', {
+  },
+  {
     storageKey: 'isCopyToClipboard',
     label: 'DLパス・URLのコピー',
-  }],
-]);
+  },
+];

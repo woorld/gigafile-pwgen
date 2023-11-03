@@ -6,23 +6,29 @@ const toCamelCase = (str: string) => str.replace(/-[a-z0-9]/g, str => str.slice(
 window.addEventListener('load', async () => {
   const settingList = document.getElementById('setting-list');
 
-  // @ts-ignore
-  for (const [key, param] of settingParams) {
-    const kebabStorageKey = toKebabCase(param.storageKey);
+  // 設定項目リストから設定画面を生成して#setting-listに格納
+  for (const settingParam of settingParams) {
+    const kebabStorageKey = toKebabCase(settingParam.storageKey);
 
+    // 設定項目の<li>
     const settingInput = document.createElement('li');
     settingInput.className = 'input-row';
 
+    // 項目名のラベル
     const label = document.createElement('label');
     label.setAttribute('for', kebabStorageKey);
+    label.textContent = settingParam.label;
 
+    // 項目のオンオフスイッチラッパー
     const checkbox = document.createElement('div');
     checkbox.className = 'checkbox';
 
+    // 項目のオンオフスイッチ本体
     const checkboxInput = document.createElement('input');
     checkboxInput.setAttribute('type', 'checkbox');
     checkboxInput.id = kebabStorageKey;
 
+    // 項目のオンオフスイッチの装飾用<label>
     const checkboxLabel = document.createElement('label');
     checkboxLabel.className = 'checkbox__switch';
     checkboxLabel.setAttribute('for', kebabStorageKey);
