@@ -29,20 +29,40 @@
   -webkit-text-fill-color: #000;
 }
 
-.pwgen-toast {
-  border-left: solid 8px #47b881;
-  border-radius: 4px;
-  box-shadow: 4px 4px rgba(0, 0, 0, 0.2);
-  background-color: #f0f5ff;
+#pwgen-toast-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
   position: fixed;
   top: 40px;
   left: 50%;
   transform: translate(-50%, 0);
+  z-index: 10000;
+}
+
+.pwgen-toast {
+  opacity: 0;
+  border-left-style: solid;
+  border-left-width: 8px;
+  border-radius: 4px;
+  box-shadow: 4px 4px rgba(0, 0, 0, 0.2);
+  background-color: #f0f5ff;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 10000;
   transition: 200ms ease;
+}
+
+.pwgen-toast:nth-child(n + 2) {
+  margin-top: 12px;
+}
+
+.pwgen-toast--update {
+  border-left-color: #5888e0;
+}
+
+.pwgen-toast--copied {
+  border-left-color: #47b881;
 }
 
 .pwgen-toast__icon {

@@ -61,30 +61,47 @@ const copyToClipboard = async (copyText: string): Promise<void> => {
 //   tooltip.style.left = targetElement.offsetLeft + targetElement.offsetWidth / 2 - tooltipRect.width / 2 + 'px';
 // };
 
-const showUpdateToast = () => {
-  document.body.insertAdjacentHTML('beforeend', `
-  <div class="pwgen-toast">
-    <img class="pwgen-toast__icon">
-    <div class="pwgen-toast__content">
+type ToastType = 'Update' | 'Copied';
+const showToast = (type: ToastType) => {
+  const toastList = document.getElementById('pwgen-toast-list');
+  if (!toastList) {
+    return;
+  }
+
+  const toastClass = type === 'Update' ? 'update' : 'copied';
+  const toastContent = type === 'Update'
+    ? `
       <p>ギガファイル便DLパスジェネレーターがアップデートされました！</p>
       <p>詳しくは<a href="https://github.com/woorld/gigafile-pwgen/releases/" target="_blank" rel="noopener">こちら</a>をご覧ください。</p>
-    </div>
-    <div class="pwgen-toast__close-btn-area"></div>
-  </div>
+    `
+    : '<p>DLパス・URLをコピーしました！</p>';
+
+  toastList.insertAdjacentHTML('beforeend', `
+    <li class="pwgen-toast pwgen-toast--${toastClass}">
+      <img class="pwgen-toast__icon">
+      <div class="pwgen-toast__content">${toastContent}</div>
+      <div class="pwgen-toast__close-btn-area"></div>
+    </li>
   `);
+  const toast = toastList.lastElementChild as HTMLElement;
 
   // CSSでは画像のパスを設定できないためこちらで設定する
-  const toastIcon = document.getElementsByClassName('pwgen-toast__icon')[0];
+  const toastIcon = toast!.getElementsByClassName('pwgen-toast__icon')[0];
   toastIcon!.setAttribute('src', chrome.runtime.getURL('img/icon/icon128.png'));
 
-  const toastCloseBtn = document.getElementsByClassName('pwgen-toast__close-btn-area')[0];
-  toastCloseBtn.addEventListener('click', () => {
-    // HACK: アニメーション完了を待って要素を削除する
-    const toast = toastCloseBtn.parentElement;
-
+  const removeToast = () => {
     toast!.style.opacity = '0';
-    setTimeout(() => { toast!.remove(); }, 1000);
-  });
+    // HACK: アニメーション完了を待って要素を削除する
+    setTimeout(() => { toast!.remove(); }, 500);
+  };
+  const toastCloseBtn = toast!.getElementsByClassName('pwgen-toast__close-btn-area')[0];
+
+  // ×ボタン押下または表示後10秒経過でトースト削除
+  toastCloseBtn.addEventListener('click', () => { removeToast(); });
+  setTimeout(removeToast, 1000 * 10);
+
+  // 要素追加後にopacityを1にすることでアニメーションして表示させようとするが、直後にアラートが出るためいきなり出るように見える
+  toast!.style.opacity = '1';
 };
 
 chrome.storage.sync.get(['isEnable'], (result) => {
@@ -92,13 +109,18 @@ chrome.storage.sync.get(['isEnable'], (result) => {
     return;
   }
 
+  // トースト用のリストを作成
+  const toastList = document.createElement('ul');
+  toastList.id = 'pwgen-toast-list';
+  document.body.appendChild(toastList);
+
   chrome.storage.sync.get(['isUpdate'], (result) => {
     if (!result.isUpdate) {
       return;
     }
 
     // アップデート直後の場合はトーストで通知する
-    showUpdateToast();
+    showToast('Update');
     chrome.storage.sync.set({ isUpdate: false });
   });
 
@@ -142,6 +164,7 @@ chrome.storage.sync.get(['isEnable'], (result) => {
       const copyText = `${dlUrl}\nダウンロードパスワード：${pw}`;
 
       await copyToClipboard(copyText);
+      showToast('Copied');
       obsPackUp.disconnect();
     });
 
@@ -188,6 +211,7 @@ chrome.storage.sync.get(['isEnable'], (result) => {
           const copyText = `${dlUrl}\nダウンロードパスワード：${pw}`;
 
           await copyToClipboard(copyText);
+          showToast('Copied');
         });
 
         uploadFileArea.getElementsByClassName('dlkey')[0].appendChild(button);
