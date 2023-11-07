@@ -41,25 +41,44 @@ const copyToClipboard = async (copyText: string): Promise<void> => {
   }
 };
 
-// TODO: コピー通知用に改修
-// const createTooltip = (content: string, targetElement: HTMLElement): void => {
-//   const tooltip = document.createElement('div');
-//   tooltip.className = 'pwgen-tooltip';
-//   tooltip.innerHTML = `<p>${content}</p>`;
+const showCopiedTooltip = (targetElement: HTMLElement): void => {
+  // すでにツールチップが表示されている場合は削除
+  const oldTooltips = document.getElementsByClassName('pwgen-tooltip');
+  if (oldTooltips.length >= 1) {
+    for (const tooltip of oldTooltips) {
+      tooltip.remove();
+    }
+  }
 
-//   tooltip.addEventListener('click', (e) => {
-//     e.stopPropagation();
-//   });
+  document.body.insertAdjacentHTML('beforeend', `
+    <div class="pwgen-tooltip">
+      <p class="pwgen-tooltip__content">DLパス・URLをコピーしました！</p>
+    </div>
+  `);
 
-//   targetElement.appendChild(tooltip);
+  const tooltip = document.getElementsByClassName('pwgen-tooltip')[0] as HTMLElement;
+  const targetRect = targetElement.getBoundingClientRect();
+  const tooltipRect = tooltip!.getBoundingClientRect();
 
-//   const targetRect = targetElement.getBoundingClientRect();
-//   const tooltipRect = tooltip.getBoundingClientRect();
+  // 対象要素の2px上にツールチップの底辺が来るように調整
+  tooltip!.style.top = `${targetRect.top - tooltipRect.height - 2}px`;
+  tooltip!.style.left = `${targetRect.left + (targetRect.width / 2) - (tooltipRect.width / 2)}px`;
 
-//   // HACK: シェブロン部分を要素に重ねるため+8pxする
-//   tooltip.style.top = targetRect.height + 8 + 'px';
-//   tooltip.style.left = targetElement.offsetLeft + targetElement.offsetWidth / 2 - tooltipRect.width / 2 + 'px';
-// };
+  const removeTooltip = () => {
+    window.removeEventListener('scroll', removeTooltip);
+    if (!document.body.contains(tooltip)) {
+      return;
+    }
+
+    tooltip!.style.opacity = '0';
+    // HACK: アニメーション完了を待って要素を削除する
+    setTimeout(() => { tooltip!.remove() }, 1000);
+  };
+
+  // 画面スクロールまたは表示後10秒経過でツールチップ削除
+  window.addEventListener('scroll', removeTooltip);
+  setTimeout(removeTooltip, 1000 * 10);
+};
 
 type ToastType = 'Update' | 'Copied';
 const showToast = (type: ToastType) => {
@@ -90,6 +109,8 @@ const showToast = (type: ToastType) => {
   toastIcon!.setAttribute('src', chrome.runtime.getURL('img/icon/icon128.png'));
 
   const removeToast = () => {
+    // TODO: 要素がDOMツリーに存在する場合のみ削除処理を実行するよう修正
+
     toast!.style.opacity = '0';
     // HACK: アニメーション完了を待って要素を削除する
     setTimeout(() => { toast!.remove(); }, 500);
@@ -164,7 +185,11 @@ chrome.storage.sync.get(['isEnable'], (result) => {
       const copyText = `${dlUrl}\nダウンロードパスワード：${pw}`;
 
       await copyToClipboard(copyText);
+
+      // TODO: 設定によってだし分け
       showToast('Copied');
+      showCopiedTooltip(buttonPackUpWithPw);
+
       obsPackUp.disconnect();
     });
 
@@ -211,7 +236,10 @@ chrome.storage.sync.get(['isEnable'], (result) => {
           const copyText = `${dlUrl}\nダウンロードパスワード：${pw}`;
 
           await copyToClipboard(copyText);
+
+          // TODO: 設定によってだし分け
           showToast('Copied');
+          showCopiedTooltip(button);
         });
 
         uploadFileArea.getElementsByClassName('dlkey')[0].appendChild(button);
