@@ -1,4 +1,4 @@
-import { randChar, pwLength, uploadCompleteStr } from './constants';
+import { randChar, pwLength, uploadCompleteStr, copiedMessage } from './constants';
 
 const generatePw = (): string => {
   return Array.from(crypto.getRandomValues(new Uint32Array(pwLength))).map((n) => randChar[n % randChar.length]).join('');
@@ -52,7 +52,7 @@ const showCopiedTooltip = (targetElement: HTMLElement): void => {
 
   document.body.insertAdjacentHTML('beforeend', `
     <div class="pwgen-tooltip">
-      <p class="pwgen-tooltip__content">DLパス・URLをコピーしました！</p>
+      <p class="pwgen-tooltip__content">${copiedMessage}</p>
     </div>
   `);
 
@@ -96,7 +96,7 @@ const showToast = (type: ToastType) => {
       <p>ギガファイル便DLパスジェネレーターがアップデートされました！</p>
       <p>詳しくは<a href="https://github.com/woorld/gigafile-pwgen/releases/" target="_blank" rel="noopener">こちら</a>をご覧ください。</p>
     `
-    : '<p>DLパス・URLをコピーしました！</p>';
+    : `<p>${copiedMessage}</p>`;
 
   toastList.insertAdjacentHTML('beforeend', `
     <li class="pwgen-toast pwgen-toast--${toastClass}">
