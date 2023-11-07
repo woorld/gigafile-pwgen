@@ -1,4 +1,5 @@
 .pwgen-tooltip {
+  opacity: 0;
   all: initial;
   cursor: default;
   transition: 200ms ease;

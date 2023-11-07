@@ -72,12 +72,15 @@ const showCopiedTooltip = (targetElement: HTMLElement): void => {
 
     tooltip!.style.opacity = '0';
     // HACK: アニメーション完了を待って要素を削除する
-    setTimeout(() => { tooltip!.remove() }, 1000);
+    setTimeout(() => { tooltip!.remove(); }, 400);
   };
 
   // 画面スクロールまたは表示後10秒経過でツールチップ削除
   window.addEventListener('scroll', removeTooltip);
   setTimeout(removeTooltip, 1000 * 10);
+
+  // 要素追加後にopacityを1にすることでアニメーションして表示させようとするが、直後にアラートが出るためいきなり出るように見える
+  tooltip!.style.opacity = '1';
 };
 
 type ToastType = 'Update' | 'Copied';
@@ -109,11 +112,13 @@ const showToast = (type: ToastType) => {
   toastIcon!.setAttribute('src', chrome.runtime.getURL('img/icon/icon128.png'));
 
   const removeToast = () => {
-    // TODO: 要素がDOMツリーに存在する場合のみ削除処理を実行するよう修正
+    if (!document.body.contains(toast)) {
+      return;
+    }
 
     toast!.style.opacity = '0';
     // HACK: アニメーション完了を待って要素を削除する
-    setTimeout(() => { toast!.remove(); }, 500);
+    setTimeout(() => { toast!.remove(); }, 400);
   };
   const toastCloseBtn = toast!.getElementsByClassName('pwgen-toast__close-btn-area')[0];
 
