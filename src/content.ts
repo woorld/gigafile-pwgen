@@ -124,7 +124,9 @@ const showToast = (type: ToastType) => {
 
   // ×ボタン押下または表示後10秒経過でトースト削除
   toastCloseBtn.addEventListener('click', () => { removeToast(); });
-  setTimeout(removeToast, 1000 * 10);
+  if (type === 'Copied') {
+    setTimeout(removeToast, 1000 * 10);
+  }
 
   // 要素追加後にopacityを1にすることでアニメーションして表示させようとするが、直後にアラートが出るためいきなり出るように見える
   toast!.style.opacity = '1';
