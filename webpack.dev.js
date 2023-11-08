@@ -1,4 +1,5 @@
 const CopyPlugin = require('copy-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -12,7 +13,14 @@ module.exports = {
       {
         test: /\.ts$/,
         use: 'ts-loader',
-      }
+      },
+      {
+        test: /\.css$/i,
+        use: [
+          'style-loader',
+          'css-loader',
+        ],
+      },
     ],
   },
   // import文で拡張子を省略していても解決できるようにする
@@ -24,6 +32,7 @@ module.exports = {
   },
   output: {
     path: __dirname + '/dist',
+    clean: true,
   },
   plugins: [
     new CopyPlugin({
@@ -35,4 +44,10 @@ module.exports = {
     }),
   ],
   devtool: 'inline-source-map',
+  // ソース内のライセンスを別ファイルに展開しない
+  optimization: {
+    minimizer: [new TerserPlugin({
+      extractComments: false,
+    })],
+  },
 };

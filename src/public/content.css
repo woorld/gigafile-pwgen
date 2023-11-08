@@ -1,122 +1,39 @@
-.pwgen-tooltip {
-  opacity: 0;
-  all: initial;
-  cursor: default;
-  transition: 200ms ease;
-  /* TODO: 白背景+box-shadowでは吹き出し部分に難があるため、外枠のカラーを仮置き中 いつかテーマカラーを決めてその色にしたい */
-  background-color: #28729f;
-  position: fixed;
-  padding: 4px 8px;
-  border-radius: 4px;
-  text-align: center;
-  width: auto;
-  z-index: 10000;
-  font-size: 14px;
-}
-
-.pwgen-tooltip::before {
-  content: "";
-  width: 12px;
-  height: 12px;
-  /* TODO: 白背景+box-shadowでは吹き出し部分に難があるため、外枠のカラーを仮置き中 いつかテーマカラーを決めてその色にしたい */
-  background-color: #28729f;
-  transform: rotate(45deg);
-  position: absolute;
-  bottom: -6px;
-  left: calc(50% - 6px);
-}
-
-.pwgen-tooltip__content {
-  margin: 0;
-  color: #fff;
-}
-
-#pwgen-toast-list {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  width: 520px;
-  position: fixed;
-  top: 40px;
-  left: 50%;
-  transform: translate(-50%, 0);
-  z-index: 10000;
-}
-
 .pwgen-toast {
-  opacity: 0;
-  border-left-style: solid;
-  border-left-width: 8px;
-  border-radius: 4px;
-  box-shadow: 4px 4px rgba(0, 0, 0, 0.2);
-  background-color: #f0f5ff;
+  font-size: 14px;
+  width: 540px;
+  max-width: 100% !important;
+}
+
+.pwgen-toast .notyf__wrapper {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.pwgen-toast .notyf__icon {
+  width: 32px;
+  height: 32px;
   display: flex;
+  justify-content: center;
   align-items: center;
-  transition: 200ms ease;
-}
-
-.pwgen-toast:nth-child(n + 2) {
-  margin-top: 12px;
-}
-
-.pwgen-toast--update {
-  border-left-color: #5888e0;
-}
-
-.pwgen-toast--copied {
-  border-left-color: #47b881;
 }
 
 .pwgen-toast__icon {
-  margin-left:8px;
-  width: 32px;
-  height: 32px;
-  user-select: none;
-  pointer-events: none;
+  background-image: url('chrome-extension://__MSG_@@extension_id__/img/icon/icon128.png');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 100%;
+  height: 100%;
 }
 
-.pwgen-toast__content {
-  margin: 8px 0 8px 8px;
-  font-size: 14px;
-}
-
-.pwgen-toast__content p {
+.pwgen-toast p {
   margin: 0;
 }
 
-.pwgen-toast__close-btn-area {
-  width: 32px;
-  height: 100%;
-  position: relative;
-  transition: 200ms ease;
-  margin-left: auto;
+.pwgen-toast a {
+  color: #00f;
 }
 
-.pwgen-toast__close-btn-area:hover {
-  opacity: 0.8;
-}
-
-.pwgen-toast__close-btn-area::before,
-.pwgen-toast__close-btn-area::after {
-  content: "";
-  width: 12px;
-  height: 2px;
-  background-color: #666;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-}
-
-.pwgen-toast__close-btn-area::before {
-  transform: translate(-50%, -50%) rotate(45deg);
-}
-
-.pwgen-toast__close-btn-area::after {
-  transform: translate(-50%, -50%) rotate(-45deg);
-}
-
-@media screen and (max-width: 600px) {
-  #pwgen-toast-list {
-    width: 90%;
-  }
+.pwgen-toast a:visited {
+  color: #a500ff;
 }

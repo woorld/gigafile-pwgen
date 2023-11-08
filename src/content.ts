@@ -1,4 +1,8 @@
 import { randChar, pwLength, uploadCompleteStr, copiedMessage } from './constants';
+import { Notyf } from 'notyf';
+import tippy from 'tippy.js';
+import 'notyf/notyf.min.css';
+import 'tippy.js/dist/tippy.css';
 
 const generatePw = (): string => {
   return Array.from(crypto.getRandomValues(new Uint32Array(pwLength))).map((n) => randChar[n % randChar.length]).join('');
@@ -42,105 +46,73 @@ const copyToClipboard = async (copyText: string): Promise<void> => {
 };
 
 const showCopiedTooltip = (targetElement: HTMLElement): void => {
-  // すでにツールチップが表示されている場合は削除
-  const oldTooltips = document.getElementsByClassName('pwgen-tooltip');
-  if (oldTooltips.length >= 1) {
-    for (const tooltip of oldTooltips) {
-      tooltip.remove();
-    }
-  }
+  let hideTimerId: number | null = null;
+  const tippyInstance = tippy(targetElement, {
+    content: copiedMessage,
+    trigger: 'manual',
+    onShown() {
+      hideTimerId = window.setTimeout(() => { tippyInstance.hide(); }, 1000 * 10);
+    },
+    onHidden() {
+      if (hideTimerId !== null) {
+        window.clearTimeout(hideTimerId);
+      }
+      tippyInstance.destroy();
+    },
+  });
 
-  document.body.insertAdjacentHTML('beforeend', `
-    <div class="pwgen-tooltip">
-      <p class="pwgen-tooltip__content">${copiedMessage}</p>
-    </div>
-  `);
-
-  const tooltip = document.getElementsByClassName('pwgen-tooltip')[0] as HTMLElement;
-  const targetRect = targetElement.getBoundingClientRect();
-  const tooltipRect = tooltip!.getBoundingClientRect();
-
-  // 対象要素の2px上にツールチップの底辺が来るように調整
-  tooltip!.style.top = `${targetRect.top - tooltipRect.height - 2}px`;
-  tooltip!.style.left = `${targetRect.left + (targetRect.width / 2) - (tooltipRect.width / 2)}px`;
-
-  const removeTooltip = () => {
-    window.removeEventListener('scroll', removeTooltip);
-    if (!document.body.contains(tooltip)) {
-      return;
-    }
-
-    tooltip!.style.opacity = '0';
-    // HACK: アニメーション完了を待って要素を削除する
-    setTimeout(() => { tooltip!.remove(); }, 400);
-  };
-
-  // 画面スクロールまたは表示後10秒経過でツールチップ削除
-  window.addEventListener('scroll', removeTooltip);
-  setTimeout(removeTooltip, 1000 * 10);
-
-  // 要素追加後にopacityを1にすることでアニメーションして表示させようとするが、直後にアラートが出るためいきなり出るように見える
-  tooltip!.style.opacity = '1';
+  tippyInstance.show();
 };
 
 type ToastType = 'Update' | 'Copied';
-const showToast = (type: ToastType) => {
-  const toastList = document.getElementById('pwgen-toast-list');
-  if (!toastList) {
+const notyf = new Notyf({
+  // 共通設定
+  ripple: false,
+  position: {
+    x: 'center',
+    y: 'top',
+  },
+  dismissible: true,
+  types: [
+    {
+      type: 'info',
+      duration: 0, // 自動で閉じない
+      background: '#5888e0',
+      icon: {
+        className: 'pwgen-toast__icon',
+        tagName: 'div',
+      },
+      className: 'pwgen-toast',
+    },
+    {
+      type: 'success',
+      duration: 1000 * 10,
+      className: 'pwgen-toast',
+    },
+  ],
+});
+
+const showToast = (toastType: ToastType): void => {
+  if (toastType === 'Update') {
+    notyf.open({
+      type: 'info',
+      message: `
+        <p>ギガファイル便DLパスジェネレーターがアップデートされました！</p>
+        <p>詳しくは<a href="https://github.com/woorld/gigafile-pwgen/releases/" target="_blank" rel="noopener">こちら</a>をご覧ください。</p>
+      `,
+    });
     return;
   }
-
-  const toastClass = type === 'Update' ? 'update' : 'copied';
-  const toastContent = type === 'Update'
-    ? `
-      <p>ギガファイル便DLパスジェネレーターがアップデートされました！</p>
-      <p>詳しくは<a href="https://github.com/woorld/gigafile-pwgen/releases/" target="_blank" rel="noopener">こちら</a>をご覧ください。</p>
-    `
-    : `<p>${copiedMessage}</p>`;
-
-  toastList.insertAdjacentHTML('beforeend', `
-    <li class="pwgen-toast pwgen-toast--${toastClass}">
-      <img class="pwgen-toast__icon">
-      <div class="pwgen-toast__content">${toastContent}</div>
-      <div class="pwgen-toast__close-btn-area"></div>
-    </li>
-  `);
-  const toast = toastList.lastElementChild as HTMLElement;
-
-  // CSSでは画像のパスを設定できないためこちらで設定する
-  const toastIcon = toast!.getElementsByClassName('pwgen-toast__icon')[0];
-  toastIcon!.setAttribute('src', chrome.runtime.getURL('img/icon/icon128.png'));
-
-  const removeToast = () => {
-    if (!document.body.contains(toast)) {
-      return;
-    }
-
-    toast!.style.opacity = '0';
-    // HACK: アニメーション完了を待って要素を削除する
-    setTimeout(() => { toast!.remove(); }, 400);
-  };
-  const toastCloseBtn = toast!.getElementsByClassName('pwgen-toast__close-btn-area')[0];
-
-  // ×ボタン押下または表示後10秒経過でトースト削除
-  toastCloseBtn.addEventListener('click', () => { removeToast(); });
-  if (type === 'Copied') {
-    setTimeout(removeToast, 1000 * 10);
-  }
-
-  // 要素追加後にopacityを1にすることでアニメーションして表示させようとするが、直後にアラートが出るためいきなり出るように見える
-  toast!.style.opacity = '1';
+  notyf.open({
+    type: 'success',
+    message: copiedMessage,
+  });
 };
 
 chrome.storage.sync.get(['isEnable'], (result) => {
   if (!result.isEnable) {
     return;
   }
-
-  // トースト用のリストを作成
-  const toastList = document.createElement('ul');
-  toastList.id = 'pwgen-toast-list';
-  document.body.appendChild(toastList);
 
   chrome.storage.sync.get(['isUpdate'], (result) => {
     if (!result.isUpdate) {
