@@ -109,6 +109,23 @@ const showToast = (toastType: ToastType): void => {
   });
 };
 
+const showCopiedNotice = async (targetElement: HTMLElement): Promise<void> => {
+  const copiedNoticeType = (await chrome.storage.sync.get('copiedNoticeType'))['copiedNoticeType'];
+  switch (copiedNoticeType) {
+    // 'none'の場合は何もしない
+    case 'tooltip':
+      showCopiedTooltip(targetElement);
+      return;
+    case 'toast':
+      showToast('Copied');
+      return;
+    case 'both':
+      showCopiedTooltip(targetElement);
+      showToast('Copied');
+      return;
+  }
+};
+
 chrome.storage.sync.get(['isEnable'], (result) => {
   if (!result.isEnable) {
     return;
@@ -165,9 +182,7 @@ chrome.storage.sync.get(['isEnable'], (result) => {
 
       await copyToClipboard(copyText);
 
-      // TODO: 設定によってだし分け
-      showToast('Copied');
-      showCopiedTooltip(buttonPackUpWithPw);
+      showCopiedNotice(buttonPackUpWithPw);
 
       obsPackUp.disconnect();
     });
@@ -216,9 +231,7 @@ chrome.storage.sync.get(['isEnable'], (result) => {
 
           await copyToClipboard(copyText);
 
-          // TODO: 設定によってだし分け
-          showToast('Copied');
-          showCopiedTooltip(button);
+          showCopiedNotice(button);
         });
 
         uploadFileArea.getElementsByClassName('dlkey')[0].appendChild(button);
