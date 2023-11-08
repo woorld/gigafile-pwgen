@@ -1,4 +1,4 @@
-import { randChar, pwLength, uploadCompleteStr, copiedMessage } from './constants';
+import { randChar, pwLength, uploadCompleteStr, copiedMessage, copiedMessageShowMs } from './constants';
 import { Notyf } from 'notyf';
 import tippy from 'tippy.js';
 import 'notyf/notyf.min.css';
@@ -51,7 +51,7 @@ const showCopiedTooltip = (targetElement: HTMLElement): void => {
     content: copiedMessage,
     trigger: 'manual',
     onShown() {
-      hideTimerId = window.setTimeout(() => { tippyInstance.hide(); }, 1000 * 10);
+      hideTimerId = window.setTimeout(() => { tippyInstance.hide(); }, copiedMessageShowMs);
     },
     onHidden() {
       if (hideTimerId !== null) {
@@ -86,7 +86,7 @@ const notyf = new Notyf({
     },
     {
       type: 'success',
-      duration: 1000 * 10,
+      duration: copiedMessageShowMs,
       className: 'pwgen-toast',
     },
   ],

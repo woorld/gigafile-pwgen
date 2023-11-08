@@ -3,6 +3,7 @@ export const randChar = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012
 export const pwLength = 4;
 export const uploadCompleteStr = '完了！';
 export const copiedMessage = 'DLパス・URLをコピーしました！';
+export const copiedMessageShowMs = 5000;
 
 export type StorageKey = 'isEnable' | 'isCopyToClipboard' | 'copiedNoticeType';
 export type SettingType = 'Toggle' | 'Select';
