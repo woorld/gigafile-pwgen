@@ -149,7 +149,11 @@ chrome.storage.sync.get(['isEnable'], (result) => {
   const buttonText: HTMLElement = document.createElement('span');
   buttonText.textContent = 'パスワード付きでまとめる';
 
-  const buttonCssText: string = copyComputedCssText(buttonPackUp, ['width', 'inline-size', 'padding']) + 'padding: 5px;';
+  let buttonCssText: string = copyComputedCssText(buttonPackUp, ['width', 'inline-size', 'padding']) + 'padding: 5px;';
+  if (navigator.userAgent.match(/Mobile/)) {
+    buttonCssText += 'width:100%;';
+  }
+
   buttonPackUpWithPw.style.cssText = buttonCssText;
   buttonPackUpWithPw.appendChild(buttonText);
 
