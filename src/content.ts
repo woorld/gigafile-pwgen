@@ -1,4 +1,4 @@
-import { randChar, pwLength, uploadCompleteStr, copiedMessage, copiedMessageShowMs } from './constants';
+import { randChar, pwLength, copiedMessage, copiedMessageShowMs } from './constants';
 import { Notyf } from 'notyf';
 import tippy from 'tippy.js';
 import 'notyf/notyf.min.css';
@@ -166,10 +166,10 @@ chrome.storage.sync.get(['isEnable'], (result) => {
     }
 
     for (const file of files) {
-      const uploadStatus = file.getElementsByClassName('status')[0].textContent;
       const buttonCancelStatus = file.getElementsByClassName('cancel')[0].getAttribute('value');
+      const isUploaded = file.querySelector<HTMLInputElement>('.file_info_url.url')!.value !== '';
 
-      if (uploadStatus === uploadCompleteStr || buttonCancelStatus === 'on') {
+      if (isUploaded || buttonCancelStatus === 'on') {
         continue;
       }
       alert('アップロードが完了していないファイルがあります。\n完了してから再度お試しください。');
@@ -219,8 +219,8 @@ chrome.storage.sync.get(['isEnable'], (result) => {
         button.style.cssText = copyComputedCssText(document.getElementsByClassName('set_dlkey')[0] as HTMLButtonElement, ['width', 'inline-size']);
 
         button.addEventListener('click', async () => {
-          const uploadStatus = uploadFileArea.getElementsByClassName('status')[0].textContent;
-          if (uploadStatus !== uploadCompleteStr) {
+          const isUploaded = uploadFileArea.querySelector<HTMLInputElement>('.file_info_url.url')!.value !== '';
+          if (!isUploaded) {
             alert('ファイルのアップロードが完了していません。\n完了してから再度お試しください。');
             return;
           }
