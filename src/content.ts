@@ -1,4 +1,4 @@
-import { randChar, pwLength, uploadCompleteStr, copiedMessage, copiedMessageShowMs } from './constants';
+import { randChar, pwLength, copiedMessage, copiedMessageShowMs } from './constants';
 import { Notyf } from 'notyf';
 import tippy from 'tippy.js';
 import 'notyf/notyf.min.css';
@@ -109,6 +109,8 @@ const showToast = (toastType: ToastType): void => {
   });
 };
 
+const isUploadedFile = (uploadFileArea: Element): boolean => uploadFileArea.querySelector<HTMLInputElement>('.file_info_url.url')!.value !== '';
+
 const showCopiedNotice = async (targetElement: HTMLElement): Promise<void> => {
   const copiedNoticeType = (await chrome.storage.sync.get('copiedNoticeType'))['copiedNoticeType'];
   switch (copiedNoticeType) {
@@ -149,12 +151,18 @@ chrome.storage.sync.get(['isEnable'], (result) => {
   const buttonText: HTMLElement = document.createElement('span');
   buttonText.textContent = 'パスワード付きでまとめる';
 
-  const buttonCssText: string = copyComputedCssText(buttonPackUp, ['width', 'inline-size', 'padding']) + 'padding: 5px;';
+  let buttonCssText: string = copyComputedCssText(buttonPackUp, ['width', 'inline-size', 'padding']) + 'padding: 5px;';
+  if (navigator.userAgent.match(/Mobile/)) {
+    buttonCssText += 'width:100%;';
+  }
+
   buttonPackUpWithPw.style.cssText = buttonCssText;
   buttonPackUpWithPw.appendChild(buttonText);
 
   buttonPackUpWithPw.addEventListener('click', async () => {
     const files = document.getElementsByClassName('file_info')!;
+    let existsUploadedFile = false;
+    let existsUploadPausingFile = false;
 
     if (files.length <= 0) {
       alert('ファイルを選択してください。');
@@ -162,14 +170,30 @@ chrome.storage.sync.get(['isEnable'], (result) => {
     }
 
     for (const file of files) {
-      const uploadStatus = file.getElementsByClassName('status')[0].textContent;
       const buttonCancelStatus = file.getElementsByClassName('cancel')[0].getAttribute('value');
 
-      if (uploadStatus === uploadCompleteStr || buttonCancelStatus === 'on') {
+      // アップロード完了済ファイル・中断中ファイルはスキップ
+      if (isUploadedFile(file)) {
+        existsUploadedFile = true;
         continue;
       }
+      if (buttonCancelStatus === 'on') {
+        existsUploadPausingFile = true;
+        continue;
+      }
+
       alert('アップロードが完了していないファイルがあります。\n完了してから再度お試しください。');
       return;
+    }
+
+    // アップロード完了済ファイルがない（中断中ファイルしかない）場合はエラーになるため処理を抜ける
+    if (!existsUploadedFile) {
+      alert('全ファイルのアップロードが中断されています。\nいずれかのファイルのアップロードを再開し、アップロード完了後に再度お試しください。');
+      return;
+    }
+
+    if (existsUploadPausingFile) {
+      alert('アップロード未完了かつ中断中のファイルはまとめられません。\n次に表示されるアラートでは全ファイルをまとめた旨が通知されますが、実際にはアップロード済みのファイル（アップロード完了後に中断したものを含む）のみがまとめられていますのでご注意ください。');
     }
 
     const pw: string = generatePw();
@@ -215,8 +239,7 @@ chrome.storage.sync.get(['isEnable'], (result) => {
         button.style.cssText = copyComputedCssText(document.getElementsByClassName('set_dlkey')[0] as HTMLButtonElement, ['width', 'inline-size']);
 
         button.addEventListener('click', async () => {
-          const uploadStatus = uploadFileArea.getElementsByClassName('status')[0].textContent;
-          if (uploadStatus !== uploadCompleteStr) {
+          if (!isUploadedFile(uploadFileArea)) {
             alert('ファイルのアップロードが完了していません。\n完了してから再度お試しください。');
             return;
           }
