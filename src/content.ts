@@ -109,6 +109,8 @@ const showToast = (toastType: ToastType): void => {
   });
 };
 
+const isUploadedFile = (uploadFileArea: Element): boolean => uploadFileArea.querySelector<HTMLInputElement>('.file_info_url.url')!.value !== '';
+
 const showCopiedNotice = async (targetElement: HTMLElement): Promise<void> => {
   const copiedNoticeType = (await chrome.storage.sync.get('copiedNoticeType'))['copiedNoticeType'];
   switch (copiedNoticeType) {
@@ -167,9 +169,8 @@ chrome.storage.sync.get(['isEnable'], (result) => {
 
     for (const file of files) {
       const buttonCancelStatus = file.getElementsByClassName('cancel')[0].getAttribute('value');
-      const isUploaded = file.querySelector<HTMLInputElement>('.file_info_url.url')!.value !== '';
 
-      if (isUploaded || buttonCancelStatus === 'on') {
+      if (isUploadedFile(file) || buttonCancelStatus === 'on') {
         continue;
       }
       alert('アップロードが完了していないファイルがあります。\n完了してから再度お試しください。');
@@ -219,8 +220,7 @@ chrome.storage.sync.get(['isEnable'], (result) => {
         button.style.cssText = copyComputedCssText(document.getElementsByClassName('set_dlkey')[0] as HTMLButtonElement, ['width', 'inline-size']);
 
         button.addEventListener('click', async () => {
-          const isUploaded = uploadFileArea.querySelector<HTMLInputElement>('.file_info_url.url')!.value !== '';
-          if (!isUploaded) {
+          if (!isUploadedFile(uploadFileArea)) {
             alert('ファイルのアップロードが完了していません。\n完了してから再度お試しください。');
             return;
           }
