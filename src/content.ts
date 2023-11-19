@@ -161,6 +161,8 @@ chrome.storage.sync.get(['isEnable'], (result) => {
 
   buttonPackUpWithPw.addEventListener('click', async () => {
     const files = document.getElementsByClassName('file_info')!;
+    let existsUploadedFile = false;
+    let existsUploadPausingFile = false;
 
     if (files.length <= 0) {
       alert('ファイルを選択してください。');
@@ -170,11 +172,28 @@ chrome.storage.sync.get(['isEnable'], (result) => {
     for (const file of files) {
       const buttonCancelStatus = file.getElementsByClassName('cancel')[0].getAttribute('value');
 
-      if (isUploadedFile(file) || buttonCancelStatus === 'on') {
+      // アップロード完了済ファイル・中断中ファイルはスキップ
+      if (isUploadedFile(file)) {
+        existsUploadedFile = true;
         continue;
       }
+      if (buttonCancelStatus === 'on') {
+        existsUploadPausingFile = true;
+        continue;
+      }
+
       alert('アップロードが完了していないファイルがあります。\n完了してから再度お試しください。');
       return;
+    }
+
+    // アップロード完了済ファイルがない（中断中ファイルしかない）場合はエラーになるため処理を抜ける
+    if (!existsUploadedFile) {
+      alert('全ファイルのアップロードが中断されています。\nいずれかのファイルのアップロードを再開し、アップロード完了後に再度お試しください。');
+      return;
+    }
+
+    if (existsUploadPausingFile) {
+      alert('アップロード未完了かつ中断中のファイルはまとめられません。\n次に表示されるアラートでは全ファイルをまとめた旨が通知されますが、実際にはアップロード済みのファイル（アップロード完了後に中断したものを含む）のみがまとめられていますのでご注意ください。');
     }
 
     const pw: string = generatePw();
