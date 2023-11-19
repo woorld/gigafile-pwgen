@@ -1,7 +1,6 @@
 // TODO: exportまみれなのどうにかしたい
 export const randChar = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 export const pwLength = 4;
-export const uploadCompleteStr = '完了！';
 export const copiedMessage = 'DLパス・URLをコピーしました！';
 export const copiedMessageShowMs = 5000;
 
