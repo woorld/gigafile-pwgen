@@ -2,7 +2,6 @@ const CopyPlugin = require('copy-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
-  mode: 'production',
   entry: {
     popup: './src/popup.ts',
     content: './src/content.ts',
@@ -31,7 +30,7 @@ module.exports = {
     ],
   },
   output: {
-    path: __dirname + '/dist',
+    path: __dirname + '/../dist',
     clean: true,
   },
   plugins: [
