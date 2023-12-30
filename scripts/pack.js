@@ -2,26 +2,28 @@ const fs = require('fs');
 const path = require('path');
 const archiver = require('archiver');
 
-// TODO: ファイル名に現在のバージョンを含めるようにする
 const sourcePath = path.join(__dirname, '..', 'dist');
 const outputPath = path.join(__dirname, '..', 'pack');
-const zipName = 'pack.zip';
 
 // packディレクトリがない場合は作成
 if (!fs.existsSync(outputPath)) {
   fs.mkdirSync(outputPath);
 }
 
-const output = fs.createWriteStream(path.join(outputPath, zipName));
+const manifest = fs.readFileSync(path.join(sourcePath, 'manifest.json'));
+const zipName = `gigafile-pwgen_v${JSON.parse(manifest).version}.zip`;
 
 // すでに同名のzipがある場合は削除
-if (fs.existsSync(path.join(outputPath, zipName))) {
-  fs.rmSync(path.join(outputPath, zipName));
+const zipPath = path.join(outputPath, zipName);
+if (fs.existsSync(zipPath)) {
+  fs.rmSync(zipPath);
 }
 
 const archive = archiver('zip', {
   zlib: { level: 9 },
 });
+
+const output = fs.createWriteStream(zipPath);
 
 archive.pipe(output);
 archive.directory(sourcePath, false);
