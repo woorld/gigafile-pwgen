@@ -33,7 +33,7 @@
     }
   ],
   "background": {
-    "service_worker": "service_worker.js"
+    "service_worker": "service-worker.js"
   },
   "icons": {
     "48": "img/icon/icon48.png",
