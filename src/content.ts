@@ -50,6 +50,8 @@ const showCopiedTooltip = (targetElement: HTMLElement): void => {
   const tippyInstance = tippy(targetElement, {
     content: copiedMessage,
     trigger: 'manual',
+    // デフォルトだとmargin-top分上に表示されるためoffsetでその分を下げる
+    offset: [0, -(Number(targetElement.style.marginTop))],
     onShown() {
       hideTimerId = window.setTimeout(() => { tippyInstance.hide(); }, copiedMessageShowMs);
     },
@@ -157,6 +159,7 @@ chrome.storage.sync.get(['isEnable'], (result) => {
   }
 
   buttonPackUpWithPw.style.cssText = buttonCssText;
+  buttonPackUpWithPw.className = 'pwgen-packup-with-pw';
   buttonPackUpWithPw.appendChild(buttonText);
 
   buttonPackUpWithPw.addEventListener('click', async () => {

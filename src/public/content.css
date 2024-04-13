@@ -37,3 +37,25 @@
 .pwgen-toast a:visited {
   color: #a500ff;
 }
+
+/* 既存レイアウト改変用スタイル */
+
+/* パスワード入力の幅調整 */
+.dlkey_inp {
+  width: 48px !important;
+  margin-bottom: 6px !important;
+}
+
+/* まとめるボタンの幅・上余白 */
+#matomete_btn {
+  margin-top: 4px !important;
+}
+
+#matomete_btn, .pwgen-packup-with-pw {
+  margin-left: 0 !important;
+  width: 100% !important;
+}
+
+#matomete_link {
+  margin-top: 10px !important;
+}
