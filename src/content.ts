@@ -145,6 +145,20 @@ chrome.storage.sync.get(['isEnable'], (result) => {
     chrome.storage.sync.set({ isUpdate: false });
   });
 
+  chrome.storage.sync.get(['isOptimizeLayout'], (result) => {
+    if (!result.isOptimizeLayout) {
+      return;
+    }
+
+    // 操作領域の親要素にレイアウト変更用クラスを付与
+    const controlWrapper = document.getElementById('file_list');
+    if (controlWrapper === null) {
+      return;
+    }
+
+    controlWrapper.classList.add('pwgen-optimized-layout');
+  });
+
   // 「まとめる」ボタンの横に「パスワード付きでまとめる」ボタンを追加
   const buttonPackUp: HTMLElement = document.getElementById('matomete_btn')!;
   const buttonPackUpWithPw = document.createElement('button');

@@ -4,7 +4,7 @@ export const pwLength = 4;
 export const copiedMessage = 'DLパス・URLをコピーしました！';
 export const copiedMessageShowMs = 5000;
 
-export type StorageKey = 'isEnable' | 'isCopyToClipboard' | 'copiedNoticeType';
+export type StorageKey = 'isEnable' | 'isCopyToClipboard' | 'copiedNoticeType' | 'isOptimizeLayout';
 export type SettingType = 'Toggle' | 'Select';
 export type SelectItem = {
   label: string,
@@ -32,7 +32,7 @@ export const settingParams: SettingParam[] = [
     type: 'Toggle',
     defaultValue: true,
   },
-  // TODO: コピー通知がオフの場合はグレーアウトして無効化する
+  // TODO: DLパスのコピーがオフの場合はグレーアウトして無効化する
   {
     storageKey: 'copiedNoticeType',
     label: 'コピー通知の方法',
@@ -56,5 +56,11 @@ export const settingParams: SettingParam[] = [
         storageValue: 'none',
       },
     ],
+  },
+  {
+    storageKey: 'isOptimizeLayout',
+    label: 'レイアウトの最適化',
+    type: 'Toggle',
+    defaultValue: true,
   },
 ];

@@ -39,23 +39,24 @@
 }
 
 /* 既存レイアウト改変用スタイル */
+/* TODO: 出し分け用クラスの外部化 SCSS対応の必要あり？ */
 
-/* パスワード入力の幅調整 */
-.dlkey_inp {
+.pwgen-optimized-layout .dlkey_inp {
   width: 48px !important;
   margin-bottom: 6px !important;
 }
 
-/* まとめるボタンの幅・上余白 */
-#matomete_btn {
+.pwgen-optimized-layout #matomete_btn {
   margin-top: 4px !important;
 }
 
-#matomete_btn, .pwgen-packup-with-pw {
+.pwgen-optimized-layout #matomete_btn,
+.pwgen-optimized-layout .pwgen-packup-with-pw {
   margin-left: 0 !important;
   width: 100% !important;
 }
 
-#matomete_link {
+/* まとめるボタンの親要素にクラスがなく指定できないため、下の要素のmargin-topを増やして下の余白をとる */
+.pwgen-optimized-layout #matomete_link {
   margin-top: 10px !important;
 }
