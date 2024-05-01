@@ -31,7 +31,7 @@ const copyComputedCssText = (target: HTMLElement, ignoreProps: Array<string>): s
   return computedCssText;
 }
 
-const copyToClipboard = async (copyText: string): Promise<void> => {
+const copyToClipboard = async (copyText: string, tooltipTargetElement: HTMLElement): Promise<void> => {
   const isCopyToClipboard = (await chrome.storage.sync.get('isCopyToClipboard'))['isCopyToClipboard'];
   if (!isCopyToClipboard) {
     return;
@@ -39,6 +39,7 @@ const copyToClipboard = async (copyText: string): Promise<void> => {
 
   try {
     await navigator.clipboard.writeText(copyText);
+    showCopiedNotice(tooltipTargetElement);
   }
   catch (e) {
     alert('クリップボードへのコピーに失敗しました: ' + e);
@@ -113,18 +114,18 @@ const showToast = (toastType: ToastType): void => {
 
 const isUploadedFile = (uploadFileArea: Element): boolean => uploadFileArea.querySelector<HTMLInputElement>('.file_info_url.url')!.value !== '';
 
-const showCopiedNotice = async (targetElement: HTMLElement): Promise<void> => {
+const showCopiedNotice = async (tooltipTargetElement: HTMLElement): Promise<void> => {
   const copiedNoticeType = (await chrome.storage.sync.get('copiedNoticeType'))['copiedNoticeType'];
   switch (copiedNoticeType) {
     // 'none'の場合は何もしない
     case 'tooltip':
-      showCopiedTooltip(targetElement);
+      showCopiedTooltip(tooltipTargetElement);
       return;
     case 'toast':
       showToast('Copied');
       return;
     case 'both':
-      showCopiedTooltip(targetElement);
+      showCopiedTooltip(tooltipTargetElement);
       showToast('Copied');
       return;
   }
@@ -221,9 +222,7 @@ chrome.storage.sync.get(['isEnable'], (result) => {
       const dlUrl = (mutationsList[0].target as HTMLInputElement).attributes[4].value;
       const copyText = `${dlUrl}\nダウンロードパスワード：${pw}`;
 
-      await copyToClipboard(copyText);
-
-      showCopiedNotice(buttonPackUpWithPw);
+      await copyToClipboard(copyText, buttonPackUpWithPw);
 
       obsPackUp.disconnect();
     });
@@ -269,9 +268,7 @@ chrome.storage.sync.get(['isEnable'], (result) => {
           const dlUrl = (uploadFileArea.getElementsByClassName('file_info_url url')[0] as HTMLInputElement).value;
           const copyText = `${dlUrl}\nダウンロードパスワード：${pw}`;
 
-          await copyToClipboard(copyText);
-
-          showCopiedNotice(button);
+          await copyToClipboard(copyText, button);
         });
 
         uploadFileArea.getElementsByClassName('dlkey')[0].appendChild(button);
