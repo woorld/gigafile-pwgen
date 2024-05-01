@@ -50,6 +50,8 @@ const showCopiedTooltip = (targetElement: HTMLElement): void => {
   const tippyInstance = tippy(targetElement, {
     content: copiedMessage,
     trigger: 'manual',
+    // デフォルトだとmargin-top分上に表示されるためoffsetでその分を下げる
+    offset: [0, -(Number(targetElement.style.marginTop))],
     onShown() {
       hideTimerId = window.setTimeout(() => { tippyInstance.hide(); }, copiedMessageShowMs);
     },
@@ -143,6 +145,20 @@ chrome.storage.sync.get(['isEnable'], (result) => {
     chrome.storage.sync.set({ isUpdate: false });
   });
 
+  chrome.storage.sync.get(['isOptimizeLayout'], (result) => {
+    if (!result.isOptimizeLayout) {
+      return;
+    }
+
+    // 操作領域の親要素にレイアウト変更用クラスを付与
+    const controlWrapper = document.getElementById('file_list');
+    if (controlWrapper === null) {
+      return;
+    }
+
+    controlWrapper.classList.add('pwgen-optimized-layout');
+  });
+
   // 「まとめる」ボタンの横に「パスワード付きでまとめる」ボタンを追加
   const buttonPackUp: HTMLElement = document.getElementById('matomete_btn')!;
   const buttonPackUpWithPw = document.createElement('button');
@@ -157,6 +173,7 @@ chrome.storage.sync.get(['isEnable'], (result) => {
   }
 
   buttonPackUpWithPw.style.cssText = buttonCssText;
+  buttonPackUpWithPw.className = 'pwgen-packup-with-pw';
   buttonPackUpWithPw.appendChild(buttonText);
 
   buttonPackUpWithPw.addEventListener('click', async () => {

@@ -11,9 +11,9 @@ const initSettingVal = (storageKey: StorageKey): void => {
 };
 
 chrome.runtime.onInstalled.addListener((details) => {
-  initSettingVal('isEnable');
-  initSettingVal('isCopyToClipboard');
-  initSettingVal('copiedNoticeType');
+  // 各設定項目に設定値がなければデフォルト値で初期化
+  const storageKeys = settingParams.map(param => param.storageKey);
+  storageKeys.forEach(key => initSettingVal(key));
 
   if (details.reason === 'update') {
     chrome.storage.sync.set({ isUpdate: true });

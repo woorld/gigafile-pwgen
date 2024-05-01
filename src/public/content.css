@@ -37,3 +37,26 @@
 .pwgen-toast a:visited {
   color: #a500ff;
 }
+
+/* 既存レイアウト改変用スタイル */
+/* TODO: 出し分け用クラスの外部化 SCSS対応の必要あり？ */
+
+.pwgen-optimized-layout .dlkey_inp {
+  width: 48px !important;
+  margin-bottom: 6px !important;
+}
+
+.pwgen-optimized-layout #matomete_btn {
+  margin-top: 4px !important;
+}
+
+.pwgen-optimized-layout #matomete_btn,
+.pwgen-optimized-layout .pwgen-packup-with-pw {
+  margin-left: 0 !important;
+  width: 100% !important;
+}
+
+/* まとめるボタンの親要素にクラスがなく指定できないため、下の要素のmargin-topを増やして下の余白をとる */
+.pwgen-optimized-layout #matomete_link {
+  margin-top: 10px !important;
+}
