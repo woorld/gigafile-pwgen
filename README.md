@@ -86,10 +86,10 @@ https://XX.gigafile.nu/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 当リポジトリでは、以下のプルリクエストの作成・運用を行っています。
 
-- 命名は`Resolve: {対象Issue} {対象Issue番号}`の形式で行う
+- 命名は`Resolve: [対象Issue名] [対象Issue番号]`の形式で行う
 - 対象Issueと同じラベルを付ける
 
 アップデートを行うプルリクエストは、以下に沿って作成します。
 
-- プルリクエスト名を`{アップデート後のバージョン}にアップデート`にする
+- プルリクエスト名を`[vX.Y.Z]にアップデート`にする
 - `update`ラベルを付ける
