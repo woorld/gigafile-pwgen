@@ -5,6 +5,13 @@ const archiver = require('archiver');
 const sourcePath = path.join(__dirname, '..', 'dist');
 const outputPath = path.join(__dirname, '..', 'pack');
 
+function outputLog(logHeader, messages) {
+  console.log(`----pack: ${logHeader}----`);
+  for (const message of messages) {
+    console.log(message);
+  }
+}
+
 // packディレクトリがない場合は作成
 if (!fs.existsSync(outputPath)) {
   fs.mkdirSync(outputPath);
@@ -23,7 +30,18 @@ const archive = archiver('zip', {
   zlib: { level: 9 },
 });
 
+archive.on('error', (e) => {
+  outputLog('パッキング中にエラーが発生しました。', [e]);
+});
+
 const output = fs.createWriteStream(zipPath);
+
+output.on('close', () => {
+  outputLog('製品ビルドのパッキングが完了しました。', [
+    `ファイル名:\t${zipName}`,
+    `ファイルパス:\t${outputPath}`,
+  ]);
+});
 
 archive.pipe(output);
 archive.directory(sourcePath, false);
