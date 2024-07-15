@@ -17,7 +17,7 @@
 1. 当リポジトリをクローン
 2. `npm install`で必要なパッケージをインストール
 3. `npm run pack`で製品ビルドのZIPファイルを生成
-4. Chromeで`chrome://extensions`にアクセスし、3.で生成されたZIPファイルをドラッグ&ドロップしてインストール
+4. Chromeで`chrome://extensions`にアクセスし、3.で`/pack`に生成されたZIPファイルをドラッグ&ドロップしてインストール
 
 ## 主な機能
 
