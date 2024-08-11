@@ -19,6 +19,15 @@ body {
   border-bottom: solid 1px #aaa;
 }
 
+.require-reload-annotation {
+  margin-top: 16px;
+}
+
+.require-reload-mark::before {
+  content: "*";
+  color: #c5cf00;
+}
+
 .input-row {
   display: flex;
   justify-content: space-between;
