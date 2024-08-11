@@ -16,6 +16,7 @@ export type SettingParam = {
   type: SettingType,
   // TODO: typeがSelectの場合はdefaultValueにstorageValueの値のみが入るようにする
   defaultValue: boolean | string;
+  requireReload?: boolean,
   selectItems?: SelectItem[],
 };
 
@@ -24,6 +25,7 @@ export const settingParams: SettingParam[] = [
     storageKey: 'isEnable',
     label: '有効',
     type: 'Toggle',
+    requireReload: true,
     defaultValue: true,
   },
   {
@@ -61,6 +63,7 @@ export const settingParams: SettingParam[] = [
     storageKey: 'isOptimizeLayout',
     label: 'レイアウトの最適化',
     type: 'Toggle',
+    requireReload: true,
     defaultValue: true,
   },
 ];
