@@ -20,6 +20,12 @@ window.addEventListener('load', async () => {
     label.setAttribute('for', kebabStorageKey);
     label.textContent = settingParam.label;
 
+    if (settingParam.requireReload) {
+      const mark = document.createElement('span');
+      mark.className = 'require-reload-mark';
+      label.append(mark);
+    }
+
     if (settingParam.type === 'Toggle') {
       // オンオフスイッチラッパー
       const checkbox = document.createElement('div');
