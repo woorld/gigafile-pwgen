@@ -57,6 +57,7 @@ body {
   display: flex;
   align-items: center;
   background-color: #aaa;
+  transition: 200ms ease;
 }
 
 .checkbox .checkbox__switch::before {
@@ -65,10 +66,6 @@ body {
   height: 24px;
   border-radius: 25px;
   background-color: #fff;
-}
-
-.checkbox.checkbox-initialized .checkbox__switch,
-.checkbox.checkbox-initialized .checkbox__switch::before {
   transition: 200ms ease;
 }
 

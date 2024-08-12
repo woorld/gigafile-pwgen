@@ -84,12 +84,4 @@ window.addEventListener('load', async () => {
     settingInput.prepend(label);
     settingList!.appendChild(settingInput);
   }
-
-  // HACK: 直後にtransitionをオンにするとアニメーションしてしまうので、少し間を置く
-  const checkboxes = document.querySelectorAll('.input-row input[type="checkbox"]');
-  setTimeout(() => {
-    for (const checkbox of checkboxes) {
-      checkbox.parentElement!.className = 'checkbox checkbox-initialized';
-    }
-  }, 50);
 });
