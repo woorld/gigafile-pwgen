@@ -1,7 +1,7 @@
 import { settingParams } from './constants';
 import van from 'vanjs-core';
 
-const { li, label, span, div, input, select, option } = van.tags;
+const { ul, li, label, span, div, input, select, option } = van.tags;
 
 const toKebabCase = (str: string) => str.replace(/[A-Z0-9]/g, repstr => '-' + repstr.toLowerCase());
 
@@ -11,7 +11,7 @@ interface HTMLEvent<T extends EventTarget> extends Event {
 }
 
 window.addEventListener('load', async () => {
-  const settingList = document.getElementById('setting-list');
+  const settingList = ul({ class: 'setting-list' });
 
   // 設定項目リストから設定画面を生成して#setting-listに格納
   for (const settingParam of settingParams) {
@@ -75,6 +75,8 @@ window.addEventListener('load', async () => {
       van.add(inputRow, settingSelect);
     }
 
-    van.add(settingList!, inputRow);
+    van.add(settingList, inputRow);
   }
+
+  van.add(document.body, settingList);
 });
