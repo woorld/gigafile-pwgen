@@ -19,9 +19,6 @@ window.addEventListener('load', async () => {
     const kebabStorageKey = toKebabCase(storageKey);
     const settedValue = (await chrome.storage.sync.get(storageKey))[storageKey];
 
-    // 設定項目の<li>
-    const inputRow = li({ class: 'input-row' });
-
     // 項目名のラベル
     const settingLabel = label({ for: kebabStorageKey }, settingParam.label);
 
@@ -29,6 +26,9 @@ window.addEventListener('load', async () => {
       const mark = span({ class: 'require-reload-mark' });
       van.add(settingLabel, mark);
     }
+
+    // 設定項目の<li>
+    const inputRow = li({ class: 'input-row' }, settingLabel);
 
     if (settingParam.type === 'Toggle') {
       // オンオフスイッチラッパー
@@ -75,8 +75,6 @@ window.addEventListener('load', async () => {
       van.add(inputRow, settingSelect);
     }
 
-    // TODO: vanでのprependってどうすんの
-    inputRow.prepend(settingLabel);
     van.add(settingList!, inputRow);
   }
 });
