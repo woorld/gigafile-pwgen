@@ -5,6 +5,11 @@ const { li, label, span, div, input, select, option } = van.tags;
 
 const toKebabCase = (str: string) => str.replace(/[A-Z0-9]/g, repstr => '-' + repstr.toLowerCase());
 
+// event.targetの型付け用
+interface HTMLEvent<T extends EventTarget> extends Event {
+  target: T;
+}
+
 window.addEventListener('load', async () => {
   const settingList = document.getElementById('setting-list');
 
@@ -27,31 +32,23 @@ window.addEventListener('load', async () => {
 
     if (settingParam.type === 'Toggle') {
       // オンオフスイッチラッパー
-      const checkbox = div({ class: 'checkbox' });
-
-      // TODO: checkboxにネストさせる
-      // オンオフスイッチ本体
-      const checkboxInput = input({
-        id: kebabStorageKey,
-        type: 'checkbox',
-        checked: settedValue,
-      });
-
-      // TODO: checkboxにネストさせる
-      // オンオフスイッチの装飾用<label>
-      const checkboxLabel = label({
-        class: 'checkbox__switch',
-        for: kebabStorageKey,
-      });
-
-      // TODO: VanJSのイベントハンドラにする
-      // オンオフ時の設定値保存イベントの設定
-      checkboxInput.addEventListener('change', async () => {
-        await chrome.storage.sync.set({ [storageKey]: checkboxInput.checked });
-      });
-
-      // TODO: checkboxにネスとする形にしたら不要になるので削除
-      van.add(checkbox, checkboxInput, checkboxLabel);
+      const checkbox = div({ class: 'checkbox' },
+        // オンオフスイッチ本体
+        input({
+          id: kebabStorageKey,
+          type: 'checkbox',
+          checked: settedValue,
+          // オンオフ時に設定値を保存する
+          onchange: async (e: HTMLEvent<HTMLInputElement>) => {
+            await chrome.storage.sync.set({ [storageKey]: e.target.checked });
+          },
+        }),
+        // オンオフスイッチの装飾用<label>
+        label({
+          class: 'checkbox__switch',
+          for: kebabStorageKey,
+        }),
+      );
 
       van.add(inputRow, checkbox);
     }
@@ -59,7 +56,11 @@ window.addEventListener('load', async () => {
       const settingSelect = select({
         id: kebabStorageKey,
         class: 'input-row__select',
-      })
+        // 選択変更時に設定値を保存する
+        onchange: async (e: HTMLEvent<HTMLSelectElement>) => {
+          await chrome.storage.sync.set({ [storageKey]: e.target.value });
+        },
+      });
 
       for (const selectItem of settingParam.selectItems!) {
         // <select>内の各<option>を生成して格納
@@ -70,12 +71,6 @@ window.addEventListener('load', async () => {
 
         van.add(settingSelect, settingSelectOption);
       }
-
-      // TODO: VanJSのイベントハンドラにする
-      // 選択変更時の設定値保存イベントの設定
-      settingSelect.addEventListener('change', async () => {
-        await chrome.storage.sync.set({ [storageKey]: settingSelect.value });
-      });
 
       van.add(inputRow, settingSelect);
     }
