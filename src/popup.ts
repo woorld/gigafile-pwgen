@@ -1,4 +1,7 @@
 import { settingParams } from './constants';
+import van from 'vanjs-core';
+
+const { li, label, span, div, input, select, option } = van.tags;
 
 const toKebabCase = (str: string) => str.replace(/[A-Z0-9]/g, repstr => '-' + repstr.toLowerCase());
 
@@ -12,76 +15,73 @@ window.addEventListener('load', async () => {
     const settedValue = (await chrome.storage.sync.get(storageKey))[storageKey];
 
     // 設定項目の<li>
-    const settingInput = document.createElement('li');
-    settingInput.className = 'input-row';
+    const inputRow = li({ class: 'input-row' });
 
     // 項目名のラベル
-    const label = document.createElement('label');
-    label.setAttribute('for', kebabStorageKey);
-    label.textContent = settingParam.label;
+    const settingLabel = label({ for: kebabStorageKey }, settingParam.label);
 
     if (settingParam.requireReload) {
-      const mark = document.createElement('span');
-      mark.className = 'require-reload-mark';
-      label.append(mark);
+      const mark = span({ class: 'require-reload-mark' });
+      van.add(settingLabel, mark);
     }
 
     if (settingParam.type === 'Toggle') {
       // オンオフスイッチラッパー
-      const checkbox = document.createElement('div');
-      checkbox.className = 'checkbox';
+      const checkbox = div({ class: 'checkbox' });
 
+      // TODO: checkboxにネストさせる
       // オンオフスイッチ本体
-      const checkboxInput = document.createElement('input');
-      checkboxInput.id = kebabStorageKey;
-      checkboxInput.setAttribute('type', 'checkbox');
+      const checkboxInput = input({
+        id: kebabStorageKey,
+        type: 'checkbox',
+        checked: settedValue,
+      });
 
+      // TODO: checkboxにネストさせる
       // オンオフスイッチの装飾用<label>
-      const checkboxLabel = document.createElement('label');
-      checkboxLabel.className = 'checkbox__switch';
-      checkboxLabel.setAttribute('for', kebabStorageKey);
+      const checkboxLabel = label({
+        class: 'checkbox__switch',
+        for: kebabStorageKey,
+      });
 
-      // ストレージに設定された値との同期
-      checkboxInput.checked = settedValue;
-
+      // TODO: VanJSのイベントハンドラにする
       // オンオフ時の設定値保存イベントの設定
       checkboxInput.addEventListener('change', async () => {
         await chrome.storage.sync.set({ [storageKey]: checkboxInput.checked });
       });
 
-      // TODO: append()で一度に複数追加するよう修正（ほかの箇所も含めて）
-      checkbox.appendChild(checkboxInput);
-      checkbox.appendChild(checkboxLabel);
-      settingInput.appendChild(checkbox);
+      // TODO: checkboxにネスとする形にしたら不要になるので削除
+      van.add(checkbox, checkboxInput, checkboxLabel);
+
+      van.add(inputRow, checkbox);
     }
     else if (settingParam.type === 'Select') {
-      const select = document.createElement('select');
-      select.id = kebabStorageKey;
-      select.className = 'input-row__select';
+      const settingSelect = select({
+        id: kebabStorageKey,
+        class: 'input-row__select',
+      })
 
       for (const selectItem of settingParam.selectItems!) {
         // <select>内の各<option>を生成して格納
-        const option = document.createElement('option');
-        option.textContent = selectItem.label;
-        option.setAttribute('value', selectItem.storageValue);
+        const settingSelectOption = option({
+          value: selectItem.storageValue,
+          selected: selectItem.storageValue === settedValue,
+        }, selectItem.label);
 
-        // ストレージに設定された値と等しければ選択状態にする
-        if (selectItem.storageValue === settedValue) {
-          option.selected = true;
-        }
-
-        select.appendChild(option);
+        van.add(settingSelect, settingSelectOption);
       }
 
+      // TODO: VanJSのイベントハンドラにする
       // 選択変更時の設定値保存イベントの設定
-      select.addEventListener('change', async () => {
-        await chrome.storage.sync.set({ [storageKey]: select.value });
+      settingSelect.addEventListener('change', async () => {
+        await chrome.storage.sync.set({ [storageKey]: settingSelect.value });
       });
 
-      settingInput.appendChild(select);
+      van.add(inputRow, settingSelect);
     }
 
-    settingInput.prepend(label);
-    settingList!.appendChild(settingInput);
+    // TODO: vanでのprependってどうすんの
+    inputRow.prepend(settingLabel);
+    van.add(settingList!, inputRow);
   }
 });
