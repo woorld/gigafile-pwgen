@@ -12,5 +12,5 @@ window.addEventListener('load', async () => {
     van.add(settingList, settingListItem);
   }
 
-  van.add(document.body, settingList);
+  document.body.append(settingList);
 });
