@@ -1,25 +1,9 @@
-// TODO: exportまみれなのどうにかしたい
+import type { SettingParam } from './types';
+
 export const randChar = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 export const pwLength = 4;
 export const copiedMessage = 'DLパス・URLをコピーしました！';
 export const copiedMessageShowMs = 5000;
-
-export type StorageKey = 'isEnable' | 'isCopyToClipboard' | 'copiedNoticeType' | 'isOptimizeLayout';
-export type SettingType = 'Toggle' | 'Select';
-export type SelectItem = {
-  label: string,
-  storageValue: string,
-};
-export type SettingParam = {
-  storageKey: StorageKey,
-  label: string,
-  type: SettingType,
-  // TODO: typeがSelectの場合はdefaultValueにstorageValueの値のみが入るようにする
-  defaultValue: boolean | string;
-  requireReload?: boolean,
-  selectItems?: SelectItem[],
-};
-
 export const settingParams: SettingParam[] = [
   {
     storageKey: 'isEnable',

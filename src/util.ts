@@ -1,8 +1,8 @@
 import { pwLength, randChar, copiedMessage, copiedMessageShowMs } from './constants';
 import { Notyf } from 'notyf';
 import tippy from 'tippy.js';
+import type { ToastType } from './types';
 
-type ToastType = 'Update' | 'Copied';
 const notyf = new Notyf({
   // 共通設定
   ripple: false,
@@ -134,8 +134,3 @@ export const copyToClipboard = async (copyText: string, tooltipTargetElement: HT
 export const isUploadedFile = (uploadFileArea: Element): boolean => {
   return uploadFileArea.querySelector<HTMLInputElement>('.file_info_url.url')!.value !== '';
 };
-
-// event.targetの型付け用
-export interface HTMLEvent<T extends EventTarget> extends Event {
-  target: T;
-}

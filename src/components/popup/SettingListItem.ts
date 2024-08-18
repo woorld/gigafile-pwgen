@@ -1,5 +1,5 @@
 import van from 'vanjs-core';
-import type { SettingParam } from '../../constants';
+import type { SettingParam } from '../../types';
 import { toKebabCase } from '../../util';
 import { SettingListItemInput } from './SettingListItemInput';
 
