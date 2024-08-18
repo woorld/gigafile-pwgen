@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "notyf": "^3.10.0",
-    "tippy.js": "^6.3.7"
+    "tippy.js": "^6.3.7",
+    "vanjs-core": "^1.5.1"
   }
 }
