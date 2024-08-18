@@ -68,7 +68,9 @@ const showCopiedNotice = async (tooltipTargetElement: HTMLElement): Promise<void
   }
 };
 
-export const toKebabCase = (str: string) => str.replace(/[A-Z0-9]/g, repstr => '-' + repstr.toLowerCase());
+export const toKebabCase = (str: string): string => {
+  return str.replace(/[A-Z0-9]/g, repstr => '-' + repstr.toLowerCase());
+};
 
 export const generatePw = (): string => {
   return Array.from(crypto.getRandomValues(new Uint32Array(pwLength))).map((n) => randChar[n % randChar.length]).join('');
@@ -129,7 +131,9 @@ export const copyToClipboard = async (copyText: string, tooltipTargetElement: HT
   }
 };
 
-export const isUploadedFile = (uploadFileArea: Element): boolean => uploadFileArea.querySelector<HTMLInputElement>('.file_info_url.url')!.value !== '';
+export const isUploadedFile = (uploadFileArea: Element): boolean => {
+  return uploadFileArea.querySelector<HTMLInputElement>('.file_info_url.url')!.value !== '';
+};
 
 // event.targetの型付け用
 export interface HTMLEvent<T extends EventTarget> extends Event {

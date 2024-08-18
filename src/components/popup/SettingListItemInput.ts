@@ -5,7 +5,7 @@ import type { HTMLEvent } from '../../util';
 
 const { div, input, label, select, option } = van.tags;
 
-export const SettingListItemInput = async (param: SettingParam) => {
+export const SettingListItemInput = async (param: SettingParam): Promise<HTMLDivElement | HTMLSelectElement> => {
   // TODO: クラス名をコンポーネント名に合わせて改修
   const { storageKey } = param;
   const kebabStorageKey = toKebabCase(storageKey);

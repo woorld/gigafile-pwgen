@@ -5,7 +5,7 @@ import { SettingListItemInput } from './SettingListItemInput';
 
 const { label, span, li } = van.tags;
 
-export const SettingListItem = async (param: SettingParam) => {
+export const SettingListItem = async (param: SettingParam): Promise<HTMLLIElement> => {
   // TODO: クラス名をコンポーネント名に合わせて改修
   const settingLabel = label({ for: toKebabCase(param.storageKey) }, param.label);
 
