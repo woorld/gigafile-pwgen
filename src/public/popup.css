@@ -28,26 +28,26 @@ body {
   color: #c5cf00;
 }
 
-.input-row {
+.setting-list-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 16px;
 }
 
-.input-row label {
+.setting-list-item label {
   font-size: 14px;
 }
 
-.input-row label .require-reload-mark {
+.setting-list-item label .require-reload-mark {
   margin-left: 4px;
 }
 
-.checkbox input {
+.setting-list-item-input-toggle input {
   display: none;
 }
 
-.checkbox .checkbox__switch {
+.setting-list-item-input-toggle .setting-list-item-input-toggle__switch {
   display: block;
   width: 48px;
   height: 24px;
@@ -60,7 +60,7 @@ body {
   transition: 200ms ease;
 }
 
-.checkbox .checkbox__switch::before {
+.setting-list-item-input-toggle .setting-list-item-input-toggle__switch::before {
   content: "";
   width: 24px;
   height: 24px;
@@ -69,16 +69,16 @@ body {
   transition: 200ms ease;
 }
 
-.checkbox input:checked + .checkbox__switch {
+.setting-list-item-input-toggle input:checked + .setting-list-item-input-toggle__switch {
   background-color: #4ad64a;
 }
 
-.checkbox input:checked + .checkbox__switch::before {
+.setting-list-item-input-toggle input:checked + .setting-list-item-input-toggle__switch::before {
   content: "";
   transform: translateX(100%);
 }
 
-.input-row__select {
+.setting-list-item-input-select {
   border-radius: 4px;
   padding: 4px 8px;
 }
@@ -89,7 +89,7 @@ body {
     color: #fff;
   }
 
-  .input-row__select {
+  .setting-list-item-input-select {
     background-color: #222;
     color: #fff;
   }

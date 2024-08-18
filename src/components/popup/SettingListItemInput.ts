@@ -6,15 +6,13 @@ import type { HTMLEvent } from '../../util';
 const { div, input, label, select, option } = van.tags;
 
 export const SettingListItemInput = async (param: SettingParam): Promise<HTMLDivElement | HTMLSelectElement> => {
-  // TODO: クラス名をコンポーネント名に合わせて改修
   const { storageKey } = param;
   const kebabStorageKey = toKebabCase(storageKey);
   const settedValue = (await chrome.storage.sync.get(storageKey))[storageKey];
 
-  // NOTE: SettingTypeが増えたらこちらも忘れず対応
   if (param.type === 'Toggle') {
     // オンオフスイッチラッパー
-    const checkbox = div({ class: 'checkbox' },
+    const checkbox = div({ class: 'setting-list-item-input-toggle' },
       // オンオフスイッチ本体
       input({
         id: kebabStorageKey,
@@ -27,7 +25,7 @@ export const SettingListItemInput = async (param: SettingParam): Promise<HTMLDiv
       }),
       // オンオフスイッチの装飾用<label>
       label({
-        class: 'checkbox__switch',
+        class: 'setting-list-item-input-toggle__switch',
         for: kebabStorageKey,
       }),
     );
@@ -37,7 +35,7 @@ export const SettingListItemInput = async (param: SettingParam): Promise<HTMLDiv
   else {
     const settingSelect = select({
       id: kebabStorageKey,
-      class: 'input-row__select',
+      class: 'setting-list-item-input-select',
       // 選択変更時に設定値を保存する
       onchange: async (e: HTMLEvent<HTMLSelectElement>) => {
         await chrome.storage.sync.set({ [storageKey]: e.target.value });

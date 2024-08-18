@@ -6,7 +6,7 @@ const { button, span } = van.tags;
 export const PackUpWithPwButton = (cssText: string, packUpButton: HTMLElement): HTMLButtonElement => {
   const packUpWithPwButton = button(
     {
-      class: 'pwgen-packup-with-pw',
+      class: 'pwgen-pack-up-with-pw-button',
       style: cssText,
     },
     span('パスワード付きでまとめる'),
