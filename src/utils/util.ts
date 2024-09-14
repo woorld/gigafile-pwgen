@@ -1,34 +1,18 @@
-import { pwLength, randChar, copiedMessage, copiedMessageShowMs } from './constants';
+import {
+  pwLength,
+  randChar,
+  copiedMessage,
+  copyFailedMessage,
+  copiedMessageShowMs,
+  notyfOption,
+  updateToastOption,
+  copyToastOption
+} from './constants';
 import { Notyf } from 'notyf';
 import tippy from 'tippy.js';
+import type { ToastType } from './types';
 
-type ToastType = 'Update' | 'Copied';
-const notyf = new Notyf({
-  // 共通設定
-  ripple: false,
-  position: {
-    x: 'center',
-    y: 'top',
-  },
-  dismissible: true,
-  types: [
-    {
-      type: 'info',
-      duration: 0, // 自動で閉じない
-      background: '#5888e0',
-      icon: {
-        className: 'pwgen-toast__icon',
-        tagName: 'div',
-      },
-      className: 'pwgen-toast',
-    },
-    {
-      type: 'success',
-      duration: copiedMessageShowMs,
-      className: 'pwgen-toast',
-    },
-  ],
-});
+const notyf = new Notyf(notyfOption);
 
 const showCopiedTooltip = (targetElement: HTMLElement): void => {
   let hideTimerId: number | null = null;
@@ -68,7 +52,8 @@ const showCopiedNotice = async (tooltipTargetElement: HTMLElement): Promise<void
   }
 };
 
-export const toKebabCase = (str: string): string => {
+// NOTE: 数字が1単語とみなされてしまうため、必要に応じて修正
+export const camelToKebab = (str: string): string => {
   return str.replace(/[A-Z0-9]/g, repstr => '-' + repstr.toLowerCase());
 };
 
@@ -101,19 +86,10 @@ export const copyComputedCssText = (target: HTMLElement, ignoreProps: Array<stri
 
 export const showToast = (toastType: ToastType): void => {
   if (toastType === 'Update') {
-    notyf.open({
-      type: 'info',
-      message: `
-        <p>ギガファイル便DLパスジェネレーターがアップデートされました！</p>
-        <p>詳しくは<a href="https://github.com/woorld/gigafile-pwgen/releases/" target="_blank" rel="noopener">こちら</a>をご覧ください。</p>
-      `,
-    });
+    notyf.open(updateToastOption);
     return;
   }
-  notyf.open({
-    type: 'success',
-    message: copiedMessage,
-  });
+  notyf.open(copyToastOption);
 };
 
 export const copyToClipboard = async (copyText: string, tooltipTargetElement: HTMLElement): Promise<void> => {
@@ -127,15 +103,10 @@ export const copyToClipboard = async (copyText: string, tooltipTargetElement: HT
     showCopiedNotice(tooltipTargetElement);
   }
   catch (e) {
-    alert('クリップボードへのコピーに失敗しました: ' + e);
+    alert(`${copyFailedMessage}\n${e}`);
   }
 };
 
 export const isUploadedFile = (uploadFileArea: Element): boolean => {
   return uploadFileArea.querySelector<HTMLInputElement>('.file_info_url.url')!.value !== '';
 };
-
-// event.targetの型付け用
-export interface HTMLEvent<T extends EventTarget> extends Event {
-  target: T;
-}

@@ -1,5 +1,5 @@
 import van from 'vanjs-core';
-import { generatePw, copyToClipboard, isUploadedFile } from '../../util';
+import { generatePw, copyToClipboard, isUploadedFile } from '../../utils/util';
 
 const { button } = van.tags;
 

@@ -1,4 +1,5 @@
-import { StorageKey, settingParams } from './constants';
+import { settingParams } from './utils/constants';
+import type { StorageKey } from './utils/types';
 
 const initSettingVal = (storageKey: StorageKey): void => {
   chrome.storage.sync.get([storageKey], (result) => {

@@ -1,13 +1,12 @@
 import van from 'vanjs-core';
-import type { SettingParam } from '../../constants';
-import { toKebabCase } from '../../util';
-import type { HTMLEvent } from '../../util';
+import type { SettingParam, HTMLEvent } from '../../utils/types';
+import { camelToKebab } from '../../utils/util';
 
 const { div, input, label, select, option } = van.tags;
 
 export const SettingListItemInput = async (param: SettingParam): Promise<HTMLDivElement | HTMLSelectElement> => {
   const { storageKey } = param;
-  const kebabStorageKey = toKebabCase(storageKey);
+  const kebabStorageKey = camelToKebab(storageKey);
   const settedValue = (await chrome.storage.sync.get(storageKey))[storageKey];
 
   if (param.type === 'Toggle') {
