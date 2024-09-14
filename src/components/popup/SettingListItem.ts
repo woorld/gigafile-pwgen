@@ -1,6 +1,6 @@
 import van from 'vanjs-core';
-import type { SettingParam } from '../../types';
-import { toKebabCase } from '../../util';
+import type { SettingParam } from '../../utils/types';
+import { toKebabCase } from '../../utils/util';
 import { SettingListItemInput } from './SettingListItemInput';
 
 const { label, span, li } = van.tags;

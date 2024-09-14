@@ -1,6 +1,6 @@
 import van from 'vanjs-core';
-import type { SettingParam, HTMLEvent } from '../../types';
-import { toKebabCase } from '../../util';
+import type { SettingParam, HTMLEvent } from '../../utils/types';
+import { toKebabCase } from '../../utils/util';
 
 const { div, input, label, select, option } = van.tags;
 

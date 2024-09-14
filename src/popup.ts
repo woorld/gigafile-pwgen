@@ -1,5 +1,5 @@
 import van from 'vanjs-core';
-import { settingParams } from './constants';
+import { settingParams } from './utils/constants';
 import { SettingList } from './components/popup/SettingList';
 import { SettingListItem } from './components/popup/SettingListItem';
 

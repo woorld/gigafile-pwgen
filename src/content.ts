@@ -1,4 +1,4 @@
-import { copyComputedCssText, showToast } from './util';
+import { copyComputedCssText, showToast } from './utils/util';
 import { PwGenerateButton } from './components/content/PwGenerateButton';
 import { PackUpWithPwButton } from './components/content/PackUpWithPwButton';
 import 'notyf/notyf.min.css';
