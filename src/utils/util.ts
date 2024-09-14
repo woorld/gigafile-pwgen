@@ -52,8 +52,8 @@ const showCopiedNotice = async (tooltipTargetElement: HTMLElement): Promise<void
   }
 };
 
-// FIXME: 数字が1単語とみなされてしまう・PascalCaseからしか変換できないことの明示
-export const toKebabCase = (str: string): string => {
+// NOTE: 数字が1単語とみなされてしまうため、必要に応じて修正
+export const camelToKebab = (str: string): string => {
   return str.replace(/[A-Z0-9]/g, repstr => '-' + repstr.toLowerCase());
 };
 
