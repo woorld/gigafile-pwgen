@@ -1,3 +1,4 @@
+import {} from 'typed-query-selector';
 import van from 'vanjs-core';
 import { isUploadedFile, generatePw, copyToClipboard } from '../../utils/util';
 
@@ -13,7 +14,7 @@ export const PackUpWithPwButton = (cssText: string, packUpButton: HTMLElement): 
   );
 
   packUpWithPwButton.addEventListener('click', async () => {
-    const files = document.getElementsByClassName('file_info')!;
+    const files = document.querySelectorAll('.file_info')!;
     let existsUploadedFile = false;
     let existsUploadPausingFile = false;
 
@@ -23,7 +24,7 @@ export const PackUpWithPwButton = (cssText: string, packUpButton: HTMLElement): 
     }
 
     for (const file of files) {
-      const buttonCancelStatus = file.getElementsByClassName('cancel')[0].getAttribute('value');
+      const buttonCancelStatus = file.querySelector('.cancel')!.getAttribute('value');
 
       // アップロード完了済ファイル・中断中ファイルはスキップ
       if (isUploadedFile(file)) {
@@ -62,10 +63,11 @@ export const PackUpWithPwButton = (cssText: string, packUpButton: HTMLElement): 
       obsPackUp.disconnect();
     });
 
-    obsPackUp.observe(document.getElementById('matomete_url')!, obsConfig);
+    obsPackUp.observe(document.querySelector('#matomete_url')!, obsConfig);
 
     // パスを入力して設定ボタンを押下
-    (document.getElementById('zip_dlkey') as HTMLInputElement).value = pw;
+    document.querySelector('input#zip_dlkey')!.value = pw;
+
     packUpButton.click();
   });
 

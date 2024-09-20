@@ -1,3 +1,4 @@
+import {} from 'typed-query-selector';
 import van from 'vanjs-core';
 import { generatePw, copyToClipboard, isUploadedFile } from '../../utils/util';
 
@@ -14,10 +15,10 @@ export const PwGenerateButton = (cssText: string, uploadFileArea: Element): HTML
 
     const pw = generatePw();
     // パスを入力して設定ボタンを押下
-    (uploadFileArea.getElementsByClassName('dlkey_inp')[0] as HTMLInputElement).value = pw;
-    (uploadFileArea.getElementsByClassName('set_dlkey gfbtn')[0] as HTMLElement).click();
+    uploadFileArea.querySelector('input.dlkey_inp')!.value = pw;
+    uploadFileArea.querySelector('button.set_dlkey.gfbtn')!.click();
 
-    const dlUrl = (uploadFileArea.getElementsByClassName('file_info_url url')[0] as HTMLInputElement).value;
+    const dlUrl = uploadFileArea.querySelector('input.file_info_url.url')!.value;
     const copyText = `${dlUrl}\nダウンロードパスワード：${pw}`;
 
     await copyToClipboard(copyText, pwGenerateButton);
