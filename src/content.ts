@@ -1,3 +1,4 @@
+import {} from 'typed-query-selector';
 import { copyComputedCssText, showToast } from './utils/util';
 import { PwGenerateButton } from './components/content/PwGenerateButton';
 import { PackUpWithPwButton } from './components/content/PackUpWithPwButton';
@@ -25,7 +26,7 @@ chrome.storage.sync.get(['isEnable'], (result) => {
     }
 
     // 操作領域の親要素にレイアウト変更用クラスを付与
-    const controlWrapper = document.getElementById('file_list');
+    const controlWrapper = document.querySelector('#file_list');
     if (controlWrapper === null) {
       return;
     }
@@ -34,7 +35,7 @@ chrome.storage.sync.get(['isEnable'], (result) => {
   });
 
   // 「まとめる」ボタンの横に「パスワード付きでまとめる」ボタンを追加
-  const packUpButton: HTMLElement = document.getElementById('matomete_btn')!;
+  const packUpButton = document.querySelector('div#matomete_btn')!;
   let packUpButtonCssText: string = copyComputedCssText(packUpButton, ['width', 'inline-size', 'padding']) + 'padding: 5px;';
   if (navigator.userAgent.match(/Mobile/)) {
     packUpButtonCssText += 'width:100%;';
@@ -43,7 +44,7 @@ chrome.storage.sync.get(['isEnable'], (result) => {
   const packUpWithPwButton = PackUpWithPwButton(packUpButtonCssText, packUpButton);
   packUpButton.parentNode!.appendChild(packUpWithPwButton);
 
-  const target = document.getElementById('file_list')!;
+  const target = document.querySelector('#file_list')!;
   const obsConfig = {
     childList: true,
     characterData: false,
@@ -56,10 +57,10 @@ chrome.storage.sync.get(['isEnable'], (result) => {
           return;
         }
 
-        const pwGenerateButtonCssText = copyComputedCssText(document.getElementsByClassName('set_dlkey')[0] as HTMLButtonElement, ['width', 'inline-size']);
+        const pwGenerateButtonCssText = copyComputedCssText(document.querySelector('button.set_dlkey'), ['width', 'inline-size']);
         const pwGenerateButton = PwGenerateButton(pwGenerateButtonCssText, uploadFileArea);
 
-        uploadFileArea.getElementsByClassName('dlkey')[0].appendChild(pwGenerateButton);
+        uploadFileArea.querySelector('.dlkey')!.appendChild(pwGenerateButton);
       });
     };
   });

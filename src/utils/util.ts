@@ -61,7 +61,13 @@ export const generatePw = (): string => {
   return Array.from(crypto.getRandomValues(new Uint32Array(pwLength))).map((n) => randChar[n % randChar.length]).join('');
 };
 
-export const copyComputedCssText = (target: HTMLElement, ignoreProps: Array<string>): string => {
+export const copyComputedCssText = (target: Element | null, ignoreProps: Array<string>): string => {
+  if (target == null) {
+    // TODO: ちゃんとしたエラー処理
+    alert('エラーが発生しました。CSS抽出対象がnullです。');
+    return '';
+  }
+
   // スタイルの取得
   const ignorePropName: RegExp | string = ignoreProps !== undefined
     ? new RegExp(`^(${ignoreProps.join('|')})$`)
