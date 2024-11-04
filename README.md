@@ -16,19 +16,18 @@
 
 1. 当リポジトリをクローン
 2. `npm install`で必要なパッケージをインストール
-3. `npm run build`でソースをビルド
-4. Chromeで`chrome://extensions`にアクセスし、「パッケージ化されていない拡張機能を読み込む」を選択
-5. 3.でビルドしたソースのあるディレクトリ（デフォルトでは`/dist`）を選択してインストール
+3. `npm run pack`で製品ビルドのZIPファイルを生成
+4. Chromeで`chrome://extensions`にアクセスし、3.で`/pack`に生成されたZIPファイルをドラッグ&ドロップしてインストール
 
 ## 主な機能
 
 ### パスワードの生成・設定
 
-![image](https://github.com/woorld/gigafile-pwgen/assets/17719812/8797af80-3529-49fc-a5a3-a0ba1760d67c)
+![「PW生成・設定」ボタンの位置を示した画像](https://github.com/user-attachments/assets/7facc9ce-47c1-43b8-bf7e-fb63fb3b5d81)
 
 ファイルのアップロード完了後、「PW生成・設定」ボタンを押すことでパスワードの生成と設定を一括で行います。
 
-![image](https://github.com/woorld/gigafile-pwgen/assets/17719812/c18e3c5b-7ccc-4714-9b4f-377d1b6bd4ea)
+![「パスワード付きでまとめる」ボタンの位置を示した画像](https://github.com/user-attachments/assets/67f4e79f-d5a3-43f4-8512-3f032271f22e)
 
 複数ファイルをアップロード後、「パスワード付きでまとめる」ボタンを押すことで、まとめたファイルにパスワードを生成・設定することが可能です。
 
@@ -59,6 +58,10 @@ https://XX.gigafile.nu/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 監視中にファイルが変更された場合、自動的に再度ビルドを行います。
 
+### `pack`
+
+リリース用の設定でビルドを行い（`build`コマンドの実行）、生成された製品ビルドをZIPファイルにして`/pack`に格納します。
+
 ## ブランチ運用
 
 当リポジトリでは、以下の方式で各ブランチを運用しています。
@@ -78,3 +81,15 @@ https://XX.gigafile.nu/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 - 各Issueから作成する
 - ブランチ名は`[Issue番号]-[ブランチ内で適用する変更・修正の英語表記（kebab-case）]`の形式で作成
+
+## プルリクエストの運用
+
+当リポジトリでは、以下のプルリクエストの作成・運用を行っています。
+
+- 命名は`Resolve: [対象Issue名] [対象Issue番号]`の形式で行う
+- 対象Issueと同じラベルを付ける
+
+アップデートを行うプルリクエストは、以下に沿って作成します。
+
+- プルリクエスト名を`[vX.Y.Z]にアップデート`にする
+- `update`ラベルを付ける
